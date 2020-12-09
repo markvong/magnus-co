@@ -1,0 +1,15 @@
+#okta-sign-in.auth-container.main-container {
+  background-color: #ffffffcf;
+}
+
+body,
+html,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background-image: url("../images/mountain-bg.jpg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+}

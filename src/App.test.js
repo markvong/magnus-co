@@ -1,8 +1,25 @@
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { act } from 'react-dom/test-utils';
 import App from './App';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+let container;
+
+beforeEach(() => {
+  container = document.createElement('div');
+  document.body.appendChild(container);
+});
+
+afterEach(() => {
+  document.body.removeChild(container);
+  container = null;
+});
+
+test('renders learn react link', async () => {
+  await act(async () => {
+    ReactDOM.render(<App/>, container);
+  });
+
+  const linkElement = container.querySelector('a');
+  expect(linkElement.textContent).toBe('Learn React');
 });
