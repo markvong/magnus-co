@@ -9,7 +9,7 @@ html,
 }
 
 body {
-  background-image: url("../images/mountain-bg.jpg");
+  /* background-image: url("../images/mountain-bg.jpg"); */
   background-size: 100%;
   background-repeat: no-repeat;
 }

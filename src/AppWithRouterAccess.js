@@ -19,7 +19,7 @@ export default withRouter(
 
     render() {
       const oktaAuth = new OktaAuth({
-        issuer: "https://dev-8181045.okta.com/oauth2/default",
+        issuer: "https://dev-8181045.okta.com",
         clientId: "0oa22p39epMCbnVSN5d6",
         redirectUri: window.location.origin + "/login/callback"
       });
