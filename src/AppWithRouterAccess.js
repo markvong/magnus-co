@@ -1,10 +1,15 @@
 import React, { Component } from "react";
-import { Route, withRouter } from "react-router-dom";
+import { Route, withRouter, Switch } from "react-router-dom";
 import { Security, SecureRoute, LoginCallback } from "@okta/okta-react";
-import Home from "./components/Home";
+import Navbar from "./components/Navbar";
+import Profile from "./components/Profile";
 import Login from "./components/Login";
+import Landing from "./components/Landing";
+
 import Protected from "./components/Protected";
 import { OktaAuth } from "@okta/okta-auth-js";
+
+import config from "./config";
 
 export default withRouter(
   class AppWithRouterAccess extends Component {
@@ -18,21 +23,20 @@ export default withRouter(
     }
 
     render() {
-      const oktaAuth = new OktaAuth({
-        issuer: "https://dev-8181045.okta.com",
-        clientId: "0oa22p39epMCbnVSN5d6",
-        redirectUri: window.location.origin + "/login/callback"
-      });
+      const oktaAuth = new OktaAuth(config.oidc);
 
       return (
         <Security oktaAuth={oktaAuth} onAuthRequired={this.onAuthRequired}>
-          <SecureRoute path="/" exact={true} component={Home} />
-          <SecureRoute path="/protected" component={Protected} />
-          <Route
-            path="/login"
-            render={() => <Login baseUrl="https://dev-8181045.okta.com" />}
-          />
-          <Route path="/login/callback" component={LoginCallback} />
+          <Navbar />
+          <div className="main-container">
+            <Switch>
+              <SecureRoute path="/profile" exact={true} component={Profile} />
+              <SecureRoute path="/admin" component={Protected} />
+              <Route path="/login" render={() => <Login />} />
+              <Route path="/login/callback" component={LoginCallback} />
+              <Route path="/" component={Landing} />
+            </Switch>
+          </div>
         </Security>
       );
     }

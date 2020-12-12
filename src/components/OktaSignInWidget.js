@@ -3,21 +3,31 @@ import OktaSignIn from "@okta/okta-signin-widget";
 import { useOktaAuth } from "@okta/okta-react";
 import "@okta/okta-signin-widget/dist/css/okta-sign-in.min.css";
 import "./OktaSignInWidget.css";
+import config from "../config";
 
 const OktaSignInWidget = (props) => {
   const el = "#root";
   const { oktaAuth, authState } = useOktaAuth();
-  const config = {
-    logo: "/images/mountain-solid.svg",
+  const { clientId, issuer, redirectUri, baseUrl, scopes } = config.oidc;
+  const {
+    logo,
+    title,
+    username_err_msge,
+    pw_err_msge,
+    sign_in_err
+  } = config.screen;
+
+  const widget_config = {
+    logo,
     i18n: {
       en: {
         // Screen labels
-        "primaryauth.title": "Welcome! Please Sign In",
+        "primaryauth.title": title,
 
         // Error messages
-        "error.username.required": "Please provide a valid username.",
-        "error.password.required": "Please enter a valid password.",
-        "errors.E0000004": "Sign in failed! Try again."
+        "error.username.required": username_err_msge,
+        "error.password.required": pw_err_msge,
+        "errors.E0000004": sign_in_err
       }
     },
     features: {
@@ -25,37 +35,20 @@ const OktaSignInWidget = (props) => {
       rememberMe: true,
       router: true
     },
-    baseUrl: props.baseUrl,
+    baseUrl,
+    clientId,
+    redirectUri,
     authParams: {
-      issuer: "https://dev-8181045.okta.com"
-      //   authorizeUrl: "https://dev-8181045.okta.com/oauth2/v1/authorize",
-      //   tokenUrl: "https://dev-8181045.okta.com/oauth2/v1/token"
+      issuer
     },
-    el: el,
-    clientId: "0oa22p39epMCbnVSN5d6",
-    redirectUri: "http://localhost:3000/login/callback"
+    el
   };
 
   useEffect(() => {
-    const signIn = new OktaSignIn(config);
-    // signIn.renderEl({ el }, props.onSuccess, props.onError);
-    // signIn
-    //   .showSignInAndRedirect(
-    //     { scopes: ["okta.users.read", "openid", "email"] },
-    //     props.onSuccess,
-    //     props.onError
-    //   )
-    //   .catch((err) => console.log(err));
-
+    const signIn = new OktaSignIn(widget_config);
     signIn
       .showSignInToGetTokens({
-        scopes: [
-          "openid",
-          "email",
-          "okta.users.read",
-          "okta.users.manage",
-          "okta.users.manage.self"
-        ]
+        scopes
       })
       .then((tokens) => {
         oktaAuth.handleLoginRedirect(tokens);
