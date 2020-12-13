@@ -20,7 +20,8 @@ export default {
       "okta.users.read",
       "okta.users.manage",
       "okta.users.manage.self",
-      "okta.groups.read"
+      "okta.groups.read",
+      "okta.groups.manage"
     ]
   },
   screen: {
