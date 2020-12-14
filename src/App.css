@@ -58,3 +58,29 @@ input {
   width: 100%;
   /* background: red; */
 }
+
+#user-form {
+  /* border: 1px red solid; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  /* padding: 1rem; */
+}
+#user-form > * {
+  /* border: 1px red solid; */
+}
+.create-user {
+  width: 50%;
+  border: 1px black solid;
+}
+
+.create-user > * {
+  margin: 0.5rem 0 0.5rem 0;
+  width: 100%;
+}
+
+li {
+  list-style: none;
+}

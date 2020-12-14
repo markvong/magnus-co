@@ -218,8 +218,10 @@ export default () => {
         .then((data) => {
           let parent = document.getElementById(userId);
           let groupTd = parent.querySelector(".user-groups");
-          let groups = data.map((obj) => obj["profile"]["name"]).join(", ");
-          groupTd.textContent = groups;
+          let groups = data
+            .map((obj) => `<li>${obj["profile"]["name"]}</li>`)
+            .join("\n");
+          groupTd.innerHTML = groups;
         })
         .catch((err) => console.log(err));
     }
@@ -229,14 +231,18 @@ export default () => {
   }, [oktaAuth]);
 
   return (
-    <div style={{ minHeight: "100%" }}>
+    <div id="user-form">
       <h2>User Management</h2>
-
-      <input onChange={handleFN} placeholder="Enter a first name" />
-      <input onChange={handleLN} placeholder="Enter a last name" />
-      <input onChange={handleEmail} placeholder="Enter a valid email address" />
-      <input onChange={handleLogin} placeholder="Enter a login username" />
-      <button onClick={createUser}>Create User</button>
+      <div className="create-user">
+        <input onChange={handleFN} placeholder="Enter a first name" />
+        <input onChange={handleLN} placeholder="Enter a last name" />
+        <input
+          onChange={handleEmail}
+          placeholder="Enter a valid email address"
+        />
+        <input onChange={handleLogin} placeholder="Enter a login username" />
+        <button onClick={createUser}>Create User</button>
+      </div>
 
       <table>
         <caption>All Users</caption>
@@ -300,7 +306,7 @@ export default () => {
                     />
                   </td>
 
-                  <td className="user-groups">{"test"}</td>
+                  <td className="user-groups">{"Loading groups..."}</td>
 
                   <td>
                     {
