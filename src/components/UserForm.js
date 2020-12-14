@@ -3,7 +3,6 @@ import { useOktaAuth } from "@okta/okta-react";
 
 export default () => {
   const users_endpoint = "https://dev-8181045.okta.com/api/v1/users";
-
   const { authState, oktaAuth } = useOktaAuth();
 
   const [firstName, setFirstName] = useState("");
@@ -13,7 +12,7 @@ export default () => {
 
   const [users, setUsers] = useState("");
 
-  const [update, setUpdate] = useState(false);
+  const [userGroups, setUserGroups] = useState([]);
 
   const handleFN = (e) => {
     setFirstName(e.target.value);
@@ -109,7 +108,10 @@ export default () => {
         fetch(`${users_endpoint}/${userId}`, options)
           .then((res) => res.text())
           .then((data) => {
-            window.location.reload();
+            // run again to delete perm
+            fetch(`${users_endpoint}/${userId}`, options)
+              .then((res) => res.text())
+              .then((data) => window.location.reload());
           });
       } else {
         console.log("Delete canceled");
@@ -204,6 +206,24 @@ export default () => {
     }
   };
 
+  const getUserGroups = async (userId) => {
+    if (authState.isAuthenticated) {
+      const accessToken = authState.accessToken["value"];
+      const options = {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      };
+
+      fetch(`${users_endpoint}/${userId}/groups`, options)
+        .then((res) => res.json())
+        .then((data) => {
+          let parent = document.getElementById(userId);
+          let groupTd = parent.querySelector(".user-groups");
+          let groups = data.map((obj) => obj["profile"]["name"]).join(", ");
+          groupTd.textContent = groups;
+        })
+        .catch((err) => console.log(err));
+    }
+  };
   useEffect(() => {
     getUsers();
   }, [oktaAuth]);
@@ -228,12 +248,14 @@ export default () => {
             <th>Last Name </th>
             <th>Email</th>
             <th>Login Username</th>
+            <th>Groups</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           {users ? (
             users.map((user) => {
+              getUserGroups(user["id"]);
               return (
                 <tr key={user["id"]} id={user["id"]}>
                   <td>
@@ -277,6 +299,9 @@ export default () => {
                       readOnly
                     />
                   </td>
+
+                  <td className="user-groups">{"test"}</td>
+
                   <td>
                     {
                       <button

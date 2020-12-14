@@ -37,19 +37,24 @@
   }
 } */
 table {
-  margin: 1rem;
+  /* margin: 1rem; */
+  table-layout: fixed;
+  width: 100%;
+  margin-top: 1rem;
 }
 th,
 tr,
 td {
   border: 1px black solid;
+  word-wrap: break-word;
 }
 th,
 td {
-  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  /* padding: 0.2rem 0.2rem 0.2rem 0.2rem; */
 }
-
 input {
   text-align: center;
+  word-wrap: break-word;
+  width: 100%;
   /* background: red; */
 }

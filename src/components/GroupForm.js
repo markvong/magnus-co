@@ -51,7 +51,7 @@ export default (props) => {
         };
         fetch(`${groups_endpoint}/${groupId}/users/${userId}`, options)
           .then((res) => res.text())
-          .then((data) => console.log(data))
+          .then((data) => window.location.reload())
           .catch((err) => console.log(err));
       }
     }
