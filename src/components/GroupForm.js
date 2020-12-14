@@ -8,6 +8,8 @@ export default (props) => {
   const [groups, setGroups] = useState(null);
   const [userId, setUserId] = useState("");
   const [groupId, setGroupId] = useState("");
+  const [name, setName] = useState("");
+  const [group, setGroup] = useState("");
 
   const users_endpoint = "https://dev-8181045.okta.com/api/v1/users";
   const groups_endpoint = "https://dev-8181045.okta.com/api/v1/groups";
@@ -34,29 +36,34 @@ export default (props) => {
     }
   };
 
-  const addUserToGroup = async (groupId, userId) => {
-    if (authState.isAuthenticated) {
-      const accessToken = authState.accessToken["value"];
-      const headers = new Headers();
-      const method = "PUT";
-      headers.append("Authorization", `Bearer ${accessToken}`);
-      headers.append("Content-Type", "application/json");
-      const options = {
-        method,
-        headers
-      };
-      fetch(`${groups_endpoint}/${groupId}/users/${userId}`, options)
-        .then((res) => res.text())
-        .then((data) => console.log(data))
-        .catch((err) => console.log(err));
+  const addUserToGroup = async (groupId, userId, name, group) => {
+    const okToAdd = window.confirm(`Add ${name} to ${group} group?`);
+    if (okToAdd) {
+      if (authState.isAuthenticated) {
+        const accessToken = authState.accessToken["value"];
+        const headers = new Headers();
+        const method = "PUT";
+        headers.append("Authorization", `Bearer ${accessToken}`);
+        headers.append("Content-Type", "application/json");
+        const options = {
+          method,
+          headers
+        };
+        fetch(`${groups_endpoint}/${groupId}/users/${userId}`, options)
+          .then((res) => res.text())
+          .then((data) => console.log(data))
+          .catch((err) => console.log(err));
+      }
     }
   };
 
   const updateUserId = (event) => {
+    setName(event.target.options[event.target.selectedIndex].text);
     setUserId(event.target.value);
   };
 
   const updateGroupId = (event) => {
+    setGroup(event.target.options[event.target.selectedIndex].text);
     setGroupId(event.target.value);
   };
 
@@ -100,7 +107,9 @@ export default (props) => {
             ))
           : "Loading groups.."}
       </select>
-      <button onClick={() => addUserToGroup(groupId, userId)}>Submit</button>
+      <button onClick={() => addUserToGroup(groupId, userId, name, group)}>
+        Submit
+      </button>
     </div>
   );
 };

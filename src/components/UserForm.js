@@ -13,6 +13,8 @@ export default () => {
 
   const [users, setUsers] = useState("");
 
+  const [update, setUpdate] = useState(false);
+
   const handleFN = (e) => {
     setFirstName(e.target.value);
   };
@@ -115,6 +117,93 @@ export default () => {
     }
   };
 
+  const updateUser = (event, userId) => {
+    let parent = document.getElementById(userId);
+    console.log(
+      parent.querySelectorAll(".user-input").forEach((input) => {
+        input.removeAttribute("readonly");
+        input.setAttribute("style", "background:yellow");
+      })
+    );
+
+    parent.querySelector(".user-delete-btn").setAttribute("hidden", "");
+    parent.querySelector(".user-save-btn").removeAttribute("hidden");
+    parent.querySelector(".user-cancel-save-btn").removeAttribute("hidden");
+    event.target.setAttribute("disabled", "true");
+  };
+
+  const cancelSave = (userId) => {
+    let parent = document.getElementById(userId);
+    parent.querySelectorAll(".user-input").forEach((input) => {
+      input.setAttribute("readonly", "");
+      input.removeAttribute("style");
+    });
+
+    parent.querySelector(".user-delete-btn").removeAttribute("hidden");
+    parent.querySelector(".user-save-btn").setAttribute("hidden", "");
+    parent.querySelector(".user-update-btn").removeAttribute("disabled");
+    parent.querySelector(".user-cancel-save-btn").setAttribute("hidden", "");
+  };
+
+  const saveUpdate = (userId) => {
+    let parent = document.getElementById(userId);
+    const userInputs = Array.from(parent.querySelectorAll(".user-input"));
+    if (!userInputs.every((input) => input.value.length > 0)) {
+      alert("Fill in all fields please.");
+    } else {
+      const firstName = userInputs[0].value;
+      const lastName = userInputs[1].value;
+      const email = userInputs[2].value;
+      const login = userInputs[3].value;
+      const okToSave = window.confirm(
+        "Are you sure you want to save changes for this user?"
+      );
+      if (okToSave) {
+        parent.querySelectorAll(".user-input").forEach((input) => {
+          input.setAttribute("readonly", "");
+          input.removeAttribute("style");
+        });
+
+        parent.querySelector(".user-delete-btn").removeAttribute("hidden");
+        parent.querySelector(".user-save-btn").setAttribute("hidden", "");
+        parent.querySelector(".user-update-btn").removeAttribute("disabled");
+
+        if (authState.isAuthenticated) {
+          const accessToken = authState.accessToken["value"];
+          const method = "POST";
+          const headers = {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`
+          };
+
+          const body = JSON.stringify({
+            profile: {
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              login: login
+            }
+          });
+
+          const options = {
+            method,
+            headers,
+            body
+          };
+
+          fetch(`${users_endpoint}/${userId}`, options)
+            .then((res) => res.json())
+            .then((data) => {
+              console.log(data);
+              window.location.reload();
+            })
+            .catch((err) => console.log(err));
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     getUsers();
   }, [oktaAuth]);
@@ -133,31 +222,88 @@ export default () => {
         <caption>All Users</caption>
         <thead>
           <tr>
+            <th></th>
             <th>User ID</th>
             <th>First Name</th>
             <th>Last Name </th>
             <th>Email</th>
             <th>Login Username</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           {users ? (
             users.map((user) => {
               return (
-                <tr key={user["id"]}>
+                <tr key={user["id"]} id={user["id"]}>
+                  <td>
+                    <button
+                      className="user-update-btn"
+                      onClick={(event) => updateUser(event, user["id"])}
+                    >
+                      Update User
+                    </button>
+                  </td>
                   <td>{user["id"]}</td>
-                  <td>{user["profile"]["firstName"]}</td>
-                  <td>{user["profile"]["lastName"]}</td>
-                  <td>{user["profile"]["email"]}</td>
-                  <td>{user["profile"]["login"]}</td>
+                  <td>
+                    <input
+                      className="user-input firstName"
+                      type="text"
+                      defaultValue={user["profile"]["firstName"]}
+                      readOnly
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="user-input lastName"
+                      type="text"
+                      defaultValue={user["profile"]["lastName"]}
+                      readOnly
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="user-input email"
+                      type="text"
+                      defaultValue={user["profile"]["email"]}
+                      readOnly
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="user-input login"
+                      type="text"
+                      defaultValue={user["profile"]["login"]}
+                      readOnly
+                    />
+                  </td>
                   <td>
                     {
                       <button
+                        className="user-delete-btn"
                         onClick={() =>
                           deleteUser(user["id"], user["profile"]["login"])
                         }
                       >
                         Delete User
+                      </button>
+                    }
+                    {
+                      <button
+                        className="user-save-btn"
+                        hidden
+                        onClick={() => saveUpdate(user["id"])}
+                      >
+                        Save
+                      </button>
+                    }
+                    {
+                      <button
+                        className="user-cancel-save-btn"
+                        hidden
+                        onClick={() => cancelSave(user["id"])}
+                      >
+                        Cancel
                       </button>
                     }
                   </td>
