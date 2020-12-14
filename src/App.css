@@ -59,7 +59,7 @@ input {
   /* background: red; */
 }
 
-#user-form {
+.edit-form {
   /* border: 1px red solid; */
   display: flex;
   flex-direction: column;
@@ -68,15 +68,15 @@ input {
   height: 100%;
   /* padding: 1rem; */
 }
-#user-form > * {
+.edit-form > * {
   /* border: 1px red solid; */
 }
-.create-user {
+.create-form {
   width: 50%;
   border: 1px black solid;
 }
 
-.create-user > * {
+.create-form > * {
   margin: 0.5rem 0 0.5rem 0;
   width: 100%;
 }

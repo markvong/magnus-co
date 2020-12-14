@@ -180,9 +180,9 @@ export default (props) => {
   }, [oktaAuth]);
 
   return (
-    <div>
+    <div className="edit-form">
       <h2>Group Management</h2>
-      <div id="create-group-div">
+      <div className="create-form">
         <input onChange={handleGroupName} placeholder="Enter a group name" />
         <input
           onChange={handleGroupDescr}

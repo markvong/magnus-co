@@ -231,9 +231,9 @@ export default () => {
   }, [oktaAuth]);
 
   return (
-    <div id="user-form">
+    <div className="edit-form">
       <h2>User Management</h2>
-      <div className="create-user">
+      <div className="create-form">
         <input onChange={handleFN} placeholder="Enter a first name" />
         <input onChange={handleLN} placeholder="Enter a last name" />
         <input
