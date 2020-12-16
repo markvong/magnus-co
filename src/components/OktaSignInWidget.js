@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import OktaSignIn from "@okta/okta-signin-widget";
 import { useOktaAuth } from "@okta/okta-react";
 import "@okta/okta-signin-widget/dist/css/okta-sign-in.min.css";
@@ -6,7 +6,8 @@ import "./OktaSignInWidget.css";
 import config from "../config";
 
 const OktaSignInWidget = (props) => {
-  const el = "#root";
+//   const el = "#root";
+    const widgetRef = useRef();
   const { oktaAuth, authState } = useOktaAuth();
   const { clientId, issuer, redirectUri, baseUrl, scopes } = config.oidc;
   const {
@@ -40,14 +41,18 @@ const OktaSignInWidget = (props) => {
     redirectUri,
     authParams: {
       issuer
-    },
-    el
+    }
   };
 
-  useEffect(() => {
+    useEffect(() => {
+        console.log(authState.isAuthenticated, "is auth?");
+        if (!widgetRef.current) {
+            return false;
+      }
     const signIn = new OktaSignIn(widget_config);
     signIn
-      .showSignInToGetTokens({
+        .showSignInToGetTokens({
+          el: widgetRef.current,
         scopes
       })
       .then((tokens) => {
@@ -59,7 +64,7 @@ const OktaSignInWidget = (props) => {
     };
   }, [oktaAuth]);
 
-  return null;
+    return <div><div ref={widgetRef}/></div>;
 };
 
 export default OktaSignInWidget;

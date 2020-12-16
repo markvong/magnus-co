@@ -67,7 +67,7 @@ export default () => {
     userGroups.includes("Administrators");
 
   return (
-    <div>
+    <div id="admin-container">
       {isAdmin ? (
         <div>
           <h1>Welcome back Admin</h1>

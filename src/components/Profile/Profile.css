@@ -1,0 +1,82 @@
+#profile-container {
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  /* min-height: 100%; */
+  border: 1px red solid;
+  /* overflow: hidden; */
+}
+
+li {
+  list-style: none;
+  /* text-align: left; */
+  /* width: auto; */
+  /* margin: 0; */
+}
+
+ul {
+  padding: 0;
+  width: 50%;
+}
+
+#inner-profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* width: 100%; */
+  border: 1px yellow solid;
+  margin: 2rem;
+  text-align: left;
+}
+
+.cell {
+  /* border: 1px red solid; */
+  margin: 2rem;
+}
+.value-cell {
+  text-align: left;
+}
+.label-cell {
+  text-align: right;
+  padding-right: 1.3rem;
+}
+
+#id-label {
+  grid-area: id-label;
+}
+#id-value {
+  grid-area: id-value;
+}
+#fname-label {
+  grid-area: fname-label;
+}
+#fname-value {
+  grid-area: fname-value;
+}
+#lname-label {
+  grid-area: lname-label;
+}
+#lname-value {
+  grid-area: lname-value;
+}
+#login-label {
+  grid-area: login-label;
+}
+#login-value {
+  grid-area: login-value;
+}
+#profile-grid-container {
+  justify-content: space-around;
+  align-content: space-around;
+  display: grid;
+  grid-template-areas:
+    "id-label id-val"
+    "member-id-label member-id-val"
+    "manager-id-label manager-id-val"
+    "login-label login-val"
+    "fname-label fname-value"
+    "lname-label lname-value";
+}
+.profile-groups {
+  border: 1px red solid;
+  margin: 1rem;
+}

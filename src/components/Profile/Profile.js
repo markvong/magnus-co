@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useOktaAuth } from "@okta/okta-react";
+import "./Profile.css";
 
 const Profile = () => {
   const { oktaAuth, authState } = useOktaAuth();
@@ -108,12 +109,7 @@ const Profile = () => {
     ) : (
       <button onClick={login}>Login</button>
     );
-  const style = {
-    border: "1px red solid",
-    display: "flex",
-    flexDirection: "column"
-  };
-
+  console.log(loginInfo);
   const name = loginInfo
     ? `${loginInfo["profile"]["firstName"]} ${loginInfo["profile"]["lastName"]}`
     : "Anon";
@@ -127,19 +123,72 @@ const Profile = () => {
     : "unknown date and time";
 
   return (
-    <div style={style}>
+    <div id="profile-container">
       {userInfo && loginInfo ? (
-        <div>
+        <div id="inner-profile-container">
+          <h3>Welcome back, {name}!</h3>
+          <div id="profile-grid-container">
+            <span id="id-label" className="label-cell cell">
+              User ID:
+            </span>
+            <span id="id-val" className="value-cell cell">
+              {userID}
+            </span>
+
+            <span id="member-id-label" className="label-cell cell">
+              Member ID:
+            </span>
+            <span id="member-id-val" className="value-cell cell">
+              {loginInfo["profile"]["memberId"]}
+            </span>
+
+            <span id="manager-id-label" className="label-cell cell">
+              Manager ID:
+            </span>
+            <span id="manager-id-val" className="value-cell cell">
+              {loginInfo["profile"]["managerId"]}
+            </span>
+
+            <span id="login-label" className="label-cell cell">
+              Last login:
+            </span>
+            <span id="login-val" className="value-cell cell">
+              {lastLogged}
+            </span>
+
+            <span id="fname-label" className="label-cell cell">
+              First Name:
+            </span>
+            <input
+              id="fname-value"
+              className="value-cell cell"
+              defaultValue={loginInfo["profile"]["firstName"]}
+            />
+
+            <span id="lname-label" className="label-cell cell">
+              Last Name:
+            </span>
+            <input
+              id="lname-value"
+              className="value-cell cell"
+              defaultValue={loginInfo["profile"]["lastName"]}
+            />
+          </div>
+          {/* <ul id="profile-list">
+            <li id="id-list-item">Your user ID is: {userID}</li>
+            <li id="lastlogin-list-item">
+              You last logged in on {lastLogged}.
+            </li>
+          </ul> */}
+          <h4>Groups that you're a part of:</h4>
           <ul>
-            <li>Welcome back {name}!</li>
-            <li>Your user ID is: {userID}</li>
-            <li>You last logged in on {lastLogged}.</li>
-            <li>Groups that you're a part of:</li>
-            <ul>
-              {userGroups
-                ? userGroups.map((group, idx) => <li key={idx}>{group}</li>)
-                : ""}
-            </ul>
+            {userGroups
+              ? userGroups.map((group, idx) => (
+                  <li key={idx} className="profile-groups">
+                    {group}
+                  </li>
+                ))
+              : ""}
           </ul>
         </div>
       ) : (

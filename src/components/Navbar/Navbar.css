@@ -1,0 +1,76 @@
+#nav-bar {
+  /* border: 1px red solid; */
+  /* border-bottom: 1px black solid; */
+  /* background-color: red; */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  background-color: rgba(0, 0, 0, 0.3);
+  /* margin: 0.5rem; */
+  padding: 0.5rem;
+  /* height: 10%; */
+}
+.logo-link,
+.nav-link {
+  padding-bottom: 0;
+  /* padding: 0; */
+  color: white;
+  margin: 0;
+  outline: none;
+}
+
+#logo-div {
+  vertical-align: bottom;
+}
+.logo-link {
+  /* display: flex; */
+  display: block;
+  /* flex-direction: row; */
+  /* justify-content: flex-end; */
+}
+
+.logo-link:hover {
+  color: white;
+  outline: none;
+  text-decoration: none;
+}
+
+.nav-log-btn {
+  padding-top: 0;
+  padding-bottom: 0;
+  display: flex;
+}
+
+#logo {
+  /* border: 1px blue solid; */
+  /* width: 100%; */
+  outline: none;
+  height: 2.1rem;
+}
+
+.logo-text {
+  font-size: 1.3rem;
+  margin: 0 0 0 0.5rem;
+  font-weight: bold;
+  vertical-align: bottom;
+  text-transform: uppercase;
+  /* border: 1px red solid; */
+}
+
+#links-div {
+  display: flex;
+  flex-wrap: wrap;
+  /* border: 1px black solid; */
+  /* padding: 0; */
+  /* margin: 0; */
+  justify-content: center;
+  align-items: flex-end;
+  /* margin: 0.5rem; */
+}
+
+#links-div > * {
+  font-size: 1.3rem;
+  /* border: 1px red solid; */
+  /* margin: 1rem; */
+}

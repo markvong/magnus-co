@@ -4,10 +4,10 @@ import { Security, SecureRoute, LoginCallback } from "@okta/okta-react";
 import { OktaAuth } from "@okta/okta-auth-js";
 import config from "./config";
 
-import Navbar from "./components/Navbar";
-import Profile from "./components/Profile";
+import Navbar from "./components/Navbar/Navbar";
+import Profile from "./components/Profile/Profile";
 import Login from "./components/Login";
-import Landing from "./components/Landing";
+import Landing from "./components/Landing/Landing";
 import Protected from "./components/Protected";
 import Admin from "./components/Admin";
 

@@ -1,0 +1,15 @@
+#landing-container {
+  /* border: 1px red solid; */
+  color: white;
+  /* min-height: 100%; */
+  /* display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: wrap; */
+  /* flex-grow: 1; */
+}
+
+.title {
+  font-size: 3rem;
+  margin: 7rem;
+}
