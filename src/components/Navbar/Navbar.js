@@ -47,6 +47,13 @@ const Navbar = () => {
         <Link to="/admin" className="nav-link">
           Administration
         </Link>
+        <a
+          href="https://dev-8181045.okta.com/app/UserHome"
+          target="_blank"
+          className="nav-link"
+        >
+          Okta Apps
+        </a>
         {button}
       </div>
     </div>

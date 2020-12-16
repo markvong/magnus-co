@@ -11,27 +11,32 @@
   font-weight: bold;
 }
 
-li {
-  list-style: none;
-  /* text-align: left; */
-  /* width: auto; */
-  /* margin: 0; */
+#profile-grid-container {
+  grid-area: profile-grid-container;
+  /* border: 1px red solid; */
 }
-
-ul {
-  padding: 0;
-  width: 50%;
+#profile-title {
+  grid-area: profile-title;
 }
-
+#groups-container {
+  grid-area: groups-container;
+  /* border: 1px green solid; */
+}
+#buttons-container {
+  grid-area: buttons-container;
+  /* border: 1px green solid; */
+}
 #inner-profile-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* width: 100%; */
-  /* border: 1px yellow solid; */
-  /* margin: 2rem; */
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas:
+    "profile-title profile-title"
+    "profile-grid-container groups-container"
+    "buttons-container buttons-container";
 }
-
+.grid-container {
+  padding: 1.5rem;
+}
 .cell {
   /* border: 1px red solid; */
   margin: 1rem 0 1rem 0;
@@ -73,13 +78,22 @@ ul {
 }
 .prof-btn {
   grid-area: prof-btn;
-
-  /* width: 50%; */
 }
+#profile-title {
+  grid-area: profile-title;
+}
+
+.container-title {
+  text-align: left;
+  padding: 0.3rem;
+  border-bottom: 1px white solid;
+  font-weight: bold;
+}
+
 #profile-grid-container {
-  /* border: 1px red solid; */
   display: grid;
   grid-template-areas:
+    "profile-title profile-title"
     "id-label id-val"
     "member-id-label member-id-val"
     "manager-id-label manager-id-val"
@@ -106,9 +120,8 @@ h4 {
 
 #profile-groups-list {
   /* border: 1px red solid; */
-  /* width: auto; */
-  /* margin: 1rem; */
-  /* border: 1px red solid; */
+  /* width: 100%; */
+  text-align: left;
 }
 
 .prof-btn {

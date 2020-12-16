@@ -166,10 +166,13 @@ const Profile = () => {
     <div id="profile-container">
       {userInfo && loginInfo ? (
         <div id="inner-profile-container">
-          <h3>
+          <h3 id="profile-title">
             Welcome back, <span id="profile-name">{name}</span>!
           </h3>
-          <div id="profile-grid-container">
+          <div id="profile-grid-container" className="grid-container">
+            <h4 className="container-title" id="profile-title">
+              Profile Information
+            </h4>
             <span id="id-label" className="label-cell cell">
               User ID:
             </span>
@@ -219,25 +222,30 @@ const Profile = () => {
             />
           </div>
 
-          <h4>Groups that you're a part of:</h4>
-          <ul id="profile-groups-list">
-            {userGroups
-              ? userGroups.map((group, idx) => (
-                  <li key={idx} className="profile-groups">
-                    {group}
-                  </li>
-                ))
-              : ""}
-          </ul>
-          {editMode ? (
-            <div>
-              {saveBtn}
-              {cancelBtn}
-            </div>
-          ) : (
-            editBtn
-          )}
-          {button}
+          <div id="groups-container" className="grid-container">
+            <h4 className="container-title">Groups that you're a part of</h4>
+            <ol id="profile-groups-list">
+              {userGroups
+                ? userGroups.map((group, idx) => (
+                    <li key={idx} className="profile-groups">
+                      {group}
+                    </li>
+                  ))
+                : ""}
+            </ol>
+          </div>
+
+          <div id="buttons-container">
+            {editMode ? (
+              <div>
+                {saveBtn}
+                {cancelBtn}
+              </div>
+            ) : (
+              editBtn
+            )}
+            {/* {button} */}
+          </div>
         </div>
       ) : (
         <div>Loading...</div>
