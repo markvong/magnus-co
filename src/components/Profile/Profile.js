@@ -10,6 +10,10 @@ const Profile = () => {
   const [loginInfo, setLoginInfo] = useState(null);
   const [userGroups, setUserGroups] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
 
   const history = useHistory();
 
@@ -74,6 +78,10 @@ const Profile = () => {
         .then((data) => {
           setCurrLogin(data["lastLogin"]);
           setLoginInfo(data);
+          setFName(data["profile"]["firstName"]);
+          setLName(data["profile"]["lastName"]);
+          setEmail(data["profile"]["email"]);
+          setUsername(data["profile"]["login"]);
         })
         .catch((err) => console.log(err));
     }
@@ -97,6 +105,24 @@ const Profile = () => {
     }
   };
 
+  const handleFName = (e) => {
+    console.log(e.target.value);
+    setFName(e.target.value);
+  };
+
+  const handleLName = (e) => {
+    console.log(e.target.value);
+    setLName(e.target.value);
+  };
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleUsername = (e) => {
+    setUsername(e.target.value);
+  };
+
   const editBtnClicked = () => {
     setEditMode(true);
     toggleFields(false);
@@ -113,8 +139,8 @@ const Profile = () => {
   };
 
   const toggleFields = (toggle) => {
-    const fNameInput = document.getElementById("fname-value");
-    const lNameInput = document.getElementById("lname-value");
+    const fNameInput = document.getElementById("fname-val");
+    const lNameInput = document.getElementById("lname-val");
 
     if (toggle) {
       fNameInput.setAttribute("readonly", "true");
@@ -142,10 +168,7 @@ const Profile = () => {
     ) : (
       <button onClick={login}>Login</button>
     );
-  console.log(loginInfo);
-  const name = loginInfo
-    ? `${loginInfo["profile"]["firstName"]} ${loginInfo["profile"]["lastName"]}`
-    : "Anon";
+  const name = loginInfo ? `${fName} ${lName}` : "Anon";
   const userID = userInfo ? userInfo["sub"] : "No ID exists.";
   const lastLogged = loginInfo
     ? `${new Date(
@@ -158,7 +181,7 @@ const Profile = () => {
   const editBtn = (
     <button
       id="edit-button"
-      className="btn btn-primary prof-btn"
+      className="btn btn-info prof-btn"
       onClick={editBtnClicked}
     >
       Edit Profile
@@ -186,7 +209,7 @@ const Profile = () => {
     <div id="profile-container">
       {userInfo && loginInfo ? (
         <div id="inner-profile-container">
-          <h3 id="profile-title">
+          <h3 id="overall-profile-title">
             Welcome back, <span id="profile-name">{name}</span>!
           </h3>
           <div id="profile-grid-container" className="grid-container">
@@ -221,29 +244,55 @@ const Profile = () => {
               {lastLogged}
             </span>
 
+            <span id="username-label" className="label-cell cell">
+              Username:
+            </span>
+            <input
+              id="username-val"
+              className="value-cell cell"
+              defaultValue={username}
+              onChange={handleUsername}
+              readOnly
+            />
+
+            <span id="email-label" className="label-cell cell">
+              Email:
+            </span>
+            <input
+              id="email-val"
+              className="value-cell cell"
+              defaultValue={email}
+              onChange={handleEmail}
+              readOnly
+            />
+
             <span id="fname-label" className="label-cell cell">
               First Name:
             </span>
             <input
-              id="fname-value"
+              id="fname-val"
               className="value-cell cell"
-              defaultValue={loginInfo["profile"]["firstName"]}
+              defaultValue={fName}
               readOnly
+              onChange={handleFName}
             />
 
             <span id="lname-label" className="label-cell cell">
               Last Name:
             </span>
             <input
-              id="lname-value"
+              id="lname-val"
               className="value-cell cell"
-              defaultValue={loginInfo["profile"]["lastName"]}
+              defaultValue={lName}
+              onChange={handleLName}
               readOnly
             />
           </div>
 
           <div id="groups-container" className="grid-container">
-            <h4 className="container-title">Your Groups</h4>
+            <h4 className="container-title" id="groups-title">
+              Your Groups
+            </h4>
             <ol id="profile-groups-list">
               {userGroups
                 ? userGroups.map((group, idx) => (

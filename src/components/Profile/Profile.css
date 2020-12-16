@@ -1,53 +1,47 @@
 #profile-container {
   background: rgba(0, 0, 0, 0.7);
   color: white;
-  height: 100%;
-  padding: 1.3rem;
-  /* border: 1px red solid; */
-  /* overflow: hidden; */
+  min-height: 100%;
 }
 
 #profile-name {
   font-weight: bold;
 }
 
-#profile-grid-container {
-  grid-area: profile-grid-container;
-  /* border: 1px red solid; */
+#overall-profile-title {
+  grid-area: overall-profile-title;
+  margin: 1.3rem 0 1.3rem 0;
 }
-#profile-title {
-  grid-area: profile-title;
-}
-#groups-container {
-  grid-area: groups-container;
-  /* border: 1px green solid; */
-}
+
 #buttons-container {
   grid-area: buttons-container;
-  /* border: 1px green solid; */
+  margin: 1.3rem 0 0 0;
 }
+
 #inner-profile-container {
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-areas:
-    "profile-title profile-title"
+    "overall-profile-title overall-profile-title"
     "profile-grid-container groups-container"
     "buttons-container buttons-container";
 }
+
 .grid-container {
   padding: 1.5rem;
 }
+
 .cell {
-  /* border: 1px red solid; */
-  margin: 1rem 0 1rem 0;
   padding: 0;
-  /* box-sizing: none; */
 }
+
 .value-cell {
   text-align: left;
+  margin: 0 0 1rem 0;
 }
+
 .label-cell {
-  text-align: right;
+  text-align: left;
   padding-right: 1.3rem;
   font-weight: bold;
 }
@@ -55,26 +49,20 @@
 #id-label {
   grid-area: id-label;
 }
-#id-value {
-  grid-area: id-value;
+#id-val {
+  grid-area: id-val;
 }
 #fname-label {
   grid-area: fname-label;
 }
-#fname-value {
-  grid-area: fname-value;
+#fname-val {
+  grid-area: fname-val;
 }
 #lname-label {
   grid-area: lname-label;
 }
-#lname-value {
-  grid-area: lname-value;
-}
-#login-label {
-  grid-area: login-label;
-}
-#login-value {
-  grid-area: login-value;
+#lname-val {
+  grid-area: lname-val;
 }
 .prof-btn {
   grid-area: prof-btn;
@@ -83,29 +71,48 @@
   grid-area: profile-title;
 }
 
+#email-label {
+  grid-area: email-label;
+}
+
+#email-val {
+  grid-area: email-val;
+}
+
+#username-label {
+  grid-area: username-label;
+}
+
+#username-val {
+  grid-area: username-val;
+}
+
 .container-title {
   text-align: left;
-  padding: 0.3rem;
   border-bottom: 1px white solid;
   font-weight: bold;
 }
 
 #profile-grid-container {
-  display: grid;
-  grid-template-areas:
-    "profile-title profile-title"
-    "id-label id-val"
-    "member-id-label member-id-val"
-    "manager-id-label manager-id-val"
-    "login-label login-val"
-    "fname-label fname-value"
-    "lname-label lname-value"
-    "prof-btn prof-btn";
+  grid-area: profile-grid-container;
+  border-right: 1px white solid;
+  display: flex;
+  flex-direction: column;
+}
+
+#groups-title {
+  grid-area: groups-title;
+}
+
+#profile-groups-list {
+  text-align: left;
+}
+
+#groups-container {
+  grid-area: groups-container;
 }
 
 #profile-grid-container > input {
-  border: 1px transparent solid;
-  /* border-bottom: 1px black solid; */
   background: rgba(255, 255, 255, 0.1);
   color: white;
 }
@@ -114,18 +121,8 @@
   outline: none;
 }
 
-h4 {
-  margin: 1.5rem 0 0.5rem 0;
-}
-
-#profile-groups-list {
-  /* border: 1px red solid; */
-  /* width: 100%; */
-  text-align: left;
-}
-
 .prof-btn {
   font-weight: bold;
-  margin: 1.3rem;
+  margin: 0 1.3rem 0 1.3rem;
   font-size: 1.1rem;
 }
