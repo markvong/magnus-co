@@ -99,14 +99,34 @@ const Profile = () => {
 
   const editBtnClicked = () => {
     setEditMode(true);
+    toggleFields(false);
   };
 
   const saveBtnClicked = () => {
     setEditMode(false);
+    toggleFields(true);
   };
 
   const cancelBtnClicked = () => {
     setEditMode(false);
+    toggleFields(true);
+  };
+
+  const toggleFields = (toggle) => {
+    const fNameInput = document.getElementById("fname-value");
+    const lNameInput = document.getElementById("lname-value");
+
+    if (toggle) {
+      fNameInput.setAttribute("readonly", "true");
+      lNameInput.setAttribute("readonly", "true");
+      fNameInput.setAttribute("style", "background:rgba(255,255,255,0.1);");
+      lNameInput.setAttribute("style", "background:rgba(255,255,255,0.1);");
+    } else {
+      fNameInput.removeAttribute("readonly");
+      lNameInput.removeAttribute("readonly");
+      fNameInput.setAttribute("style", "background:rgba(255,255,255,0.4);");
+      lNameInput.setAttribute("style", "background:rgba(255,255,255,0.4);");
+    }
   };
 
   useEffect(() => {
@@ -147,7 +167,7 @@ const Profile = () => {
   const saveBtn = (
     <button
       id="save-button"
-      className="btn btn-primary prof-btn"
+      className="btn btn-success prof-btn"
       onClick={saveBtnClicked}
     >
       Save Changes
@@ -156,7 +176,7 @@ const Profile = () => {
   const cancelBtn = (
     <button
       id="cancel-button"
-      className="btn btn-primary prof-btn"
+      className="btn btn-danger prof-btn"
       onClick={cancelBtnClicked}
     >
       Cancel
@@ -223,7 +243,7 @@ const Profile = () => {
           </div>
 
           <div id="groups-container" className="grid-container">
-            <h4 className="container-title">Groups that you're a part of</h4>
+            <h4 className="container-title">Your Groups</h4>
             <ol id="profile-groups-list">
               {userGroups
                 ? userGroups.map((group, idx) => (
