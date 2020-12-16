@@ -9,6 +9,7 @@ const Profile = () => {
   const [currLogin, setCurrLogin] = useState(null);
   const [loginInfo, setLoginInfo] = useState(null);
   const [userGroups, setUserGroups] = useState(null);
+  const [editMode, setEditMode] = useState(false);
 
   const history = useHistory();
 
@@ -96,6 +97,18 @@ const Profile = () => {
     }
   };
 
+  const editBtnClicked = () => {
+    setEditMode(true);
+  };
+
+  const saveBtnClicked = () => {
+    setEditMode(false);
+  };
+
+  const cancelBtnClicked = () => {
+    setEditMode(false);
+  };
+
   useEffect(() => {
     checkUser();
     getLastLogin();
@@ -122,6 +135,33 @@ const Profile = () => {
       ).toTimeString()}`
     : "unknown date and time";
 
+  const editBtn = (
+    <button
+      id="edit-button"
+      className="btn btn-primary prof-btn"
+      onClick={editBtnClicked}
+    >
+      Edit Profile
+    </button>
+  );
+  const saveBtn = (
+    <button
+      id="save-button"
+      className="btn btn-primary prof-btn"
+      onClick={saveBtnClicked}
+    >
+      Save Changes
+    </button>
+  );
+  const cancelBtn = (
+    <button
+      id="cancel-button"
+      className="btn btn-primary prof-btn"
+      onClick={cancelBtnClicked}
+    >
+      Cancel
+    </button>
+  );
   return (
     <div id="profile-container">
       {userInfo && loginInfo ? (
@@ -165,6 +205,7 @@ const Profile = () => {
               id="fname-value"
               className="value-cell cell"
               defaultValue={loginInfo["profile"]["firstName"]}
+              readOnly
             />
 
             <span id="lname-label" className="label-cell cell">
@@ -174,16 +215,12 @@ const Profile = () => {
               id="lname-value"
               className="value-cell cell"
               defaultValue={loginInfo["profile"]["lastName"]}
+              readOnly
             />
           </div>
-          {/* <ul id="profile-list">
-            <li id="id-list-item">Your user ID is: {userID}</li>
-            <li id="lastlogin-list-item">
-              You last logged in on {lastLogged}.
-            </li>
-          </ul> */}
+
           <h4>Groups that you're a part of:</h4>
-          <ul>
+          <ul id="profile-groups-list">
             {userGroups
               ? userGroups.map((group, idx) => (
                   <li key={idx} className="profile-groups">
@@ -192,6 +229,14 @@ const Profile = () => {
                 ))
               : ""}
           </ul>
+          {editMode ? (
+            <div>
+              {saveBtn}
+              {cancelBtn}
+            </div>
+          ) : (
+            editBtn
+          )}
           {button}
         </div>
       ) : (
