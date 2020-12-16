@@ -17,7 +17,8 @@ body {
   display: flex;
   flex-direction: column;
 }
-table {
+
+/* table {
   table-layout: fixed;
   width: 100%;
   margin-top: 1rem;
@@ -51,4 +52,4 @@ input {
 .create-form > * {
   margin: 0.5rem 0 0.5rem 0;
   width: 100%;
-}
+} */

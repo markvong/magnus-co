@@ -8,8 +8,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Profile from "./components/Profile/Profile";
 import Login from "./components/Login";
 import Landing from "./components/Landing/Landing";
-import Protected from "./components/Protected";
-import Admin from "./components/Admin";
+import Admin from "./components/Admin/Admin";
 
 export default withRouter(
   class AppWithRouterAccess extends Component {
@@ -31,7 +30,6 @@ export default withRouter(
           <div className="main-container">
             <Switch>
               <SecureRoute path="/profile" exact={true} component={Profile} />
-              <SecureRoute path="/protected" component={Protected} />
               <SecureRoute path="/admin" component={Admin} />
               <Route path="/login" render={() => <Login />} />
               <Route path="/login/callback" component={LoginCallback} />

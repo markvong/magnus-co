@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useOktaAuth } from "@okta/okta-react";
-import GroupForm from "./GroupForm";
-import UserForm from "./UserForm";
+import GroupForm from "../GroupForm/GroupForm";
+import UserForm from "../UserForm";
+import "./Admin.css";
 
 export default () => {
   const { authState, oktaAuth } = useOktaAuth();
@@ -69,13 +70,19 @@ export default () => {
   return (
     <div id="admin-container">
       {isAdmin ? (
-        <div>
-          <h1>Welcome back Admin</h1>
+        <div id="inner-admin-container">
+          <h3 id="admin-welcome-title">
+            Welcome back,{" "}
+            <span className="admin-name">
+              Administrator {profileInfo["profile"]["firstName"]}{" "}
+              {profileInfo["profile"]["lastName"]}
+            </span>
+          </h3>
           <GroupForm />
-          <UserForm />
+          {/* <UserForm /> */}
         </div>
       ) : (
-        <div>You need administrator privileges to view this page.</div>
+        <h3>You need administrator privileges to view this page.</h3>
       )}
     </div>
   );

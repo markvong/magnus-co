@@ -245,7 +245,7 @@ export default () => {
       </div>
 
       <table>
-        <caption>All Users</caption>
+        {/* <caption>All Users</caption> */}
         <thead>
           <tr>
             <th></th>
