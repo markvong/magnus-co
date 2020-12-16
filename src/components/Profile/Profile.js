@@ -126,7 +126,9 @@ const Profile = () => {
     <div id="profile-container">
       {userInfo && loginInfo ? (
         <div id="inner-profile-container">
-          <h3>Welcome back, {name}!</h3>
+          <h3>
+            Welcome back, <span id="profile-name">{name}</span>!
+          </h3>
           <div id="profile-grid-container">
             <span id="id-label" className="label-cell cell">
               User ID:
@@ -190,11 +192,11 @@ const Profile = () => {
                 ))
               : ""}
           </ul>
+          {button}
         </div>
       ) : (
         <div>Loading...</div>
       )}
-      {button}
     </div>
   );
 };
