@@ -105,6 +105,39 @@ const Profile = () => {
     }
   };
 
+  const updateUser = () => {
+    const okToUpdate = window.confirm("Save updates to your profile?");
+    if (okToUpdate) {
+      if (authState.isAuthenticated) {
+        const accessToken = authState.accessToken["value"];
+        const method = "POST";
+        const headers = {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
+        };
+        const body = JSON.stringify({
+          profile: {
+            firstName: fName,
+            lastName: lName,
+            email: email,
+            login: username
+          }
+        });
+        const options = {
+          method,
+          headers,
+          body
+        };
+
+        fetch(curr_user_endpoint, options)
+          .then((res) => res.json())
+          .then((data) => window.location.reload())
+          .catch((err) => console.log(err));
+      }
+    }
+  };
+
   const handleFName = (e) => {
     console.log(e.target.value);
     setFName(e.target.value);
@@ -131,6 +164,7 @@ const Profile = () => {
   const saveBtnClicked = () => {
     setEditMode(false);
     toggleFields(true);
+    updateUser();
   };
 
   const cancelBtnClicked = () => {
@@ -141,18 +175,21 @@ const Profile = () => {
   const toggleFields = (toggle) => {
     const fNameInput = document.getElementById("fname-val");
     const lNameInput = document.getElementById("lname-val");
+    const emailInput = document.getElementById("email-val");
+    const usernameInput = document.getElementById("username-val");
 
-    if (toggle) {
-      fNameInput.setAttribute("readonly", "true");
-      lNameInput.setAttribute("readonly", "true");
-      fNameInput.setAttribute("style", "background:rgba(255,255,255,0.1);");
-      lNameInput.setAttribute("style", "background:rgba(255,255,255,0.1);");
-    } else {
-      fNameInput.removeAttribute("readonly");
-      lNameInput.removeAttribute("readonly");
-      fNameInput.setAttribute("style", "background:rgba(255,255,255,0.4);");
-      lNameInput.setAttribute("style", "background:rgba(255,255,255,0.4);");
-    }
+    const setReadOnly = (isReadOnly, ...fields) => {
+      fields.forEach((field) => {
+        if (isReadOnly) {
+          field.setAttribute("readonly", "true");
+          field.setAttribute("style", "background:rgba(255,255,255,0.1);");
+        } else {
+          field.removeAttribute("readonly");
+          field.setAttribute("style", "background:rgba(255,255,255,0.4);");
+        }
+      });
+    };
+    setReadOnly(toggle, fNameInput, lNameInput, emailInput, usernameInput);
   };
 
   useEffect(() => {
@@ -168,7 +205,9 @@ const Profile = () => {
     ) : (
       <button onClick={login}>Login</button>
     );
-  const name = loginInfo ? `${fName} ${lName}` : "Anon";
+  const name = loginInfo
+    ? `${loginInfo["profile"]["firstName"]} ${loginInfo["profile"]["lastName"]}`
+    : "Anon";
   const userID = userInfo ? userInfo["sub"] : "No ID exists.";
   const lastLogged = loginInfo
     ? `${new Date(
@@ -205,6 +244,7 @@ const Profile = () => {
       Cancel
     </button>
   );
+
   return (
     <div id="profile-container">
       {userInfo && loginInfo ? (
