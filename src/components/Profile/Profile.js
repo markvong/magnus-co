@@ -6,7 +6,6 @@ import "./Profile.css";
 const Profile = () => {
   const { oktaAuth, authState } = useOktaAuth();
   const [userInfo, setUserInfo] = useState(null);
-  const [currLogin, setCurrLogin] = useState(null);
   const [loginInfo, setLoginInfo] = useState(null);
   const [userGroups, setUserGroups] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -19,41 +18,6 @@ const Profile = () => {
 
   const curr_user_endpoint = `https://dev-8181045.okta.com/api/v1/users/me`;
 
-  const login = async () => history.push("/login");
-  const logout = async () => {
-    setLastLogin().then((res) => {
-      if (res === "SET") {
-        oktaAuth.signOut();
-      } else {
-        console.log("Waiting to sign out.");
-      }
-    });
-  };
-
-  const setLastLogin = async () => {
-    if (loginInfo && authState.isAuthenticated) {
-      const accessToken = authState.accessToken["value"];
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${accessToken}`);
-      myHeaders.append("Content-Type", "application/json");
-
-      var data = JSON.stringify({ profile: { last_Login: currLogin } });
-
-      var options = {
-        method: "POST",
-        headers: myHeaders,
-        body: data
-      };
-
-      return fetch(curr_user_endpoint, options)
-        .then((response) => response.text())
-        .then((res) => {
-          return "SET";
-        })
-        .catch((err) => console.log(err));
-    }
-  };
-
   const checkUser = async () => {
     if (!authState.isAuthenticated) {
       setUserInfo(null);
@@ -64,7 +28,7 @@ const Profile = () => {
     }
   };
 
-  const getLastLogin = async () => {
+  const getUserInfo = async () => {
     if (authState.isAuthenticated) {
       const accessToken = authState.accessToken["value"];
       const options = {
@@ -76,7 +40,6 @@ const Profile = () => {
       fetch(curr_user_endpoint, options)
         .then((res) => res.json())
         .then((data) => {
-          setCurrLogin(data["lastLogin"]);
           setLoginInfo(data);
           setFName(data["profile"]["firstName"]);
           setLName(data["profile"]["lastName"]);
@@ -139,12 +102,10 @@ const Profile = () => {
   };
 
   const handleFName = (e) => {
-    console.log(e.target.value);
     setFName(e.target.value);
   };
 
   const handleLName = (e) => {
-    console.log(e.target.value);
     setLName(e.target.value);
   };
 
@@ -194,17 +155,10 @@ const Profile = () => {
 
   useEffect(() => {
     checkUser();
-    getLastLogin();
+    getUserInfo();
     getUserGroups();
   }, [oktaAuth]);
 
-  if (authState.isPending) return null;
-  const button =
-    authState.isAuthenticated && userInfo && currLogin ? (
-      <button onClick={logout}>Logout</button>
-    ) : (
-      <button onClick={login}>Login</button>
-    );
   const name = loginInfo
     ? `${loginInfo["profile"]["firstName"]} ${loginInfo["profile"]["lastName"]}`
     : "Anon";

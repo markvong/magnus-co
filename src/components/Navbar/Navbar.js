@@ -28,7 +28,6 @@ const Navbar = () => {
       fetch(curr_user_endpoint, options)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setCurrLogin(data["lastLogin"]);
         })
         .catch((err) => console.log(err));
