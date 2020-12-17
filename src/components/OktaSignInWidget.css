@@ -1,15 +1,25 @@
 #okta-sign-in.auth-container.main-container {
-  background-color: #ffffffcf;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
 }
 
-body,
-html,
-#root {
-  min-height: 100%;
+#okta-sign-in.auth-container .okta-form-label {
+  color: white;
 }
 
-body {
-  /* background-image: url("../images/mountain-bg.jpg"); */
-  background-size: 100%;
-  background-repeat: no-repeat;
+#okta-sign-in.auth-container h2 {
+  color: white;
+}
+
+#okta-sign-in.auth-container .link,
+#okta-sign-in.auth-container .link:active,
+#okta-sign-in.auth-container .link:hover,
+#okta-sign-in.auth-container .link:link,
+#okta-sign-in.auth-container .link:visited {
+  color: white;
+}
+
+#okta-sign-in.auth-container .primary-auth {
+  font-family: verdana;
+  color: white;
 }
