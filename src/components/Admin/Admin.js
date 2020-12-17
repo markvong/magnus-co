@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useOktaAuth } from "@okta/okta-react";
 import GroupForm from "../GroupForm/GroupForm";
-import UserForm from "../UserForm";
+import UserForm from "../UserForm/UserForm";
 import "./Admin.css";
 
 export default () => {
@@ -79,7 +79,7 @@ export default () => {
             </span>
           </h3>
           <GroupForm />
-          {/* <UserForm /> */}
+          <UserForm />
         </div>
       ) : (
         <h3>You need administrator privileges to view this page.</h3>

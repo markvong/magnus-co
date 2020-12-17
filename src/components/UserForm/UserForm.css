@@ -1,0 +1,60 @@
+#user-form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+#user-form-title {
+  width: 100%;
+  font-weight: bold;
+  text-align: left;
+}
+
+#crud-button-users {
+  align-self: flex-start;
+}
+
+#crud-button-users > * {
+  margin: 0 1rem 0 0;
+  font-weight: bold;
+  background: none;
+}
+
+#users-table-container {
+  margin: 2.5rem;
+}
+
+.user-btn {
+  font-weight: bold;
+  margin: 1rem;
+}
+
+.user-update-btn {
+  background: rgb(69, 126, 172);
+  border-color: rgb(69, 126, 172);
+}
+
+#user-form-user-groups {
+  text-align: left;
+}
+#create-form {
+  display: none;
+  width: 40%;
+}
+
+#create-form > * {
+  font-size: 1.3rem;
+  margin: 1.3rem 0 0 0;
+}
+
+#create-user-btn {
+  background: rgb(69, 126, 172);
+  border-color: rgb(69, 126, 172);
+}
+.user-data-td {
+  padding: 1.3rem;
+  border-top: 1px rgb(69, 126, 172) solid;
+  border-bottom: 1px rgb(69, 126, 172) solid;
+}

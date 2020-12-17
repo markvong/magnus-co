@@ -235,6 +235,15 @@ export default (props) => {
     toggleView(false, false, true);
   };
 
+  const cancelCreateGroup = () => {
+    const groupNameInput = document.getElementById("create-group-name-input");
+    const groupDescrInput = document.getElementById("create-group-descr-input");
+    groupNameInput.value = "";
+    groupDescrInput.value = "";
+    setGroupName("");
+    setGroupDescr("");
+  };
+
   useEffect(() => {
     getUsersAndGroups();
     getUserGroups(userId);
@@ -312,14 +321,27 @@ export default (props) => {
           onChange={handleGroupName}
           placeholder="Enter a group name"
           id="create-group-name-input"
+          className="form-control"
         />
-        <input
+        <textarea
           onChange={handleGroupDescr}
           placeholder="Enter a group description"
           id="create-group-descr-input"
+          className="form-control"
         />
-        <button onClick={createGroup} id="create-group-button">
+        <button
+          onClick={createGroup}
+          id="create-group-button"
+          className="btn btn-primary"
+        >
           Create Group
+        </button>
+        <button
+          id="cancel-create-group-button"
+          className="btn btn-warning"
+          onClick={cancelCreateGroup}
+        >
+          Cancel
         </button>
       </div>
       <div id="edit-group-users-container">
@@ -379,17 +401,16 @@ export default (props) => {
               ))
             : "Loading groups.."}
         </select>
-        {
-          <button
-            onClick={() =>
-              updateUserGroupMembership(op, groupId, userId, name, group)
-            }
-            id="edit-group-submit-btn"
-            className="btn btn-primary"
-          >
-            Submit
-          </button>
-        }
+
+        <button
+          onClick={() =>
+            updateUserGroupMembership(op, groupId, userId, name, group)
+          }
+          id="edit-group-submit-btn"
+          className="btn btn-primary"
+        >
+          Submit
+        </button>
       </div>
     </div>
   );

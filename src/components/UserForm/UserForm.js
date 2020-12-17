@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useOktaAuth } from "@okta/okta-react";
+import "./UserForm.css";
 
 export default () => {
   const users_endpoint = "https://dev-8181045.okta.com/api/v1/users";
@@ -13,6 +14,8 @@ export default () => {
   const [users, setUsers] = useState("");
 
   const [userGroups, setUserGroups] = useState([]);
+
+  const [viewUsers, setViewUsers] = useState(true);
 
   const handleFN = (e) => {
     setFirstName(e.target.value);
@@ -147,6 +150,21 @@ export default () => {
     parent.querySelector(".user-cancel-save-btn").setAttribute("hidden", "");
   };
 
+  const cancelCreateUser = () => {
+    const fNameInput = document.getElementById("first-name-input");
+    const lNameInput = document.getElementById("last-name-input");
+    const emailInput = document.getElementById("email-input");
+    const loginInput = document.getElementById("login-input");
+    fNameInput.value = "";
+    lNameInput.value = "";
+    emailInput.value = "";
+    loginInput.value = "";
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setLogin("");
+  };
+
   const saveUpdate = (userId) => {
     let parent = document.getElementById(userId);
     const userInputs = Array.from(parent.querySelectorAll(".user-input"));
@@ -218,9 +236,10 @@ export default () => {
         .then((data) => {
           let parent = document.getElementById(userId);
           let groupTd = parent.querySelector(".user-groups");
-          let groups = data
-            .map((obj) => `<li>${obj["profile"]["name"]}</li>`)
-            .join("\n");
+          let groups =
+            '<ol id="user-form-user-groups">' +
+            data.map((obj) => `<li>${obj["profile"]["name"]}</li>`).join("\n") +
+            "</ol>";
           groupTd.innerHTML = groups;
         })
         .catch((err) => console.log(err));
@@ -230,124 +249,193 @@ export default () => {
     getUsers();
   }, [oktaAuth]);
 
+  const viewUsersClicked = () => {
+    const viewTableContainer = document.getElementById("users-table-container");
+    const createUsersContainer = document.getElementById("create-form");
+    if (!viewUsers) {
+      viewTableContainer.setAttribute("style", "display: block");
+      createUsersContainer.setAttribute("style", "display:none");
+      setViewUsers(!viewUsers);
+    }
+  };
+
+  const createUsersClicked = () => {
+    const viewTableContainer = document.getElementById("users-table-container");
+    const createUsersContainer = document.getElementById("create-form");
+    if (viewUsers) {
+      viewTableContainer.setAttribute("style", "display:none; ");
+      createUsersContainer.setAttribute(
+        "style",
+        "display:flex; flex-direction:column;"
+      );
+      setViewUsers(!viewUsers);
+    }
+  };
   return (
-    <div className="edit-form">
-      <h2>User Management</h2>
-      <div className="create-form">
-        <input onChange={handleFN} placeholder="Enter a first name" />
-        <input onChange={handleLN} placeholder="Enter a last name" />
+    <div id="user-form-container">
+      <h2 id="user-form-title">User Management</h2>
+      <div id="crud-button-users">
+        <button
+          id="view-users-button"
+          className="btn btn-info"
+          onClick={viewUsersClicked}
+        >
+          View Users
+        </button>
+
+        <button
+          id="create-user-button"
+          className="btn btn-success"
+          onClick={createUsersClicked}
+        >
+          Create New User
+        </button>
+      </div>
+
+      <div id="users-table-container">
+        <table>
+          {/* <caption>All Users</caption> */}
+          <thead>
+            <tr>
+              <th></th>
+              <th>User ID</th>
+              <th className="borders">First Name</th>
+              <th className="borders">Last Name </th>
+              <th className="borders">Email</th>
+              <th className="borders">Login Username</th>
+              <th>Groups</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {users ? (
+              users.map((user) => {
+                getUserGroups(user["id"]);
+                return (
+                  <tr key={user["id"]} id={user["id"]}>
+                    <td>
+                      <button
+                        className="user-update-btn user-btn btn btn-primary"
+                        onClick={(event) => updateUser(event, user["id"])}
+                      >
+                        Update User
+                      </button>
+                    </td>
+                    <td className="user-data-td">{user["id"]}</td>
+                    <td className="borders user-data-td">
+                      <input
+                        className="user-input firstName form-control"
+                        type="text"
+                        defaultValue={user["profile"]["firstName"]}
+                        readOnly
+                      />
+                    </td>
+                    <td className="borders user-data-td">
+                      <input
+                        className="user-input lastName form-control"
+                        type="text"
+                        defaultValue={user["profile"]["lastName"]}
+                        readOnly
+                      />
+                    </td>
+                    <td className="borders user-data-td">
+                      <input
+                        className="user-input email form-control"
+                        type="text"
+                        defaultValue={user["profile"]["email"]}
+                        readOnly
+                      />
+                    </td>
+                    <td className="borders user-data-td">
+                      <input
+                        className="user-input login form-control"
+                        type="text"
+                        defaultValue={user["profile"]["login"]}
+                        readOnly
+                      />
+                    </td>
+
+                    <td className="user-groups user-data-td">
+                      {"Loading groups..."}
+                    </td>
+
+                    <td>
+                      {
+                        <button
+                          className="user-delete-btn user-btn btn btn-danger"
+                          onClick={() =>
+                            deleteUser(user["id"], user["profile"]["login"])
+                          }
+                        >
+                          Delete User
+                        </button>
+                      }
+                      {
+                        <button
+                          className="user-save-btn user-btn btn btn-success"
+                          hidden
+                          onClick={() => saveUpdate(user["id"])}
+                        >
+                          Save
+                        </button>
+                      }
+                      {
+                        <button
+                          className="user-cancel-save-btn user-btn btn btn-warning"
+                          hidden
+                          onClick={() => cancelSave(user["id"])}
+                        >
+                          Cancel
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td>Null</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+      <div id="create-form">
+        <input
+          onChange={handleFN}
+          placeholder="Enter a first name"
+          id="first-name-input"
+        />
+        <input
+          onChange={handleLN}
+          placeholder="Enter a last name"
+          id="last-name-input"
+        />
         <input
           onChange={handleEmail}
           placeholder="Enter a valid email address"
+          id="email-input"
         />
-        <input onChange={handleLogin} placeholder="Enter a login username" />
-        <button onClick={createUser}>Create User</button>
+        <input
+          onChange={handleLogin}
+          placeholder="Enter a login username"
+          id="login-input"
+        />
+        <button
+          onClick={createUser}
+          id="create-user-btn"
+          className="btn btn-primary user-btn"
+        >
+          Create User
+        </button>
+        <button
+          id="cancel-user-create-btn"
+          className="btn btn-warning user-btn"
+          onClick={cancelCreateUser}
+        >
+          Cancel
+        </button>
       </div>
-
-      <table>
-        {/* <caption>All Users</caption> */}
-        <thead>
-          <tr>
-            <th></th>
-            <th>User ID</th>
-            <th>First Name</th>
-            <th>Last Name </th>
-            <th>Email</th>
-            <th>Login Username</th>
-            <th>Groups</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {users ? (
-            users.map((user) => {
-              getUserGroups(user["id"]);
-              return (
-                <tr key={user["id"]} id={user["id"]}>
-                  <td>
-                    <button
-                      className="user-update-btn"
-                      onClick={(event) => updateUser(event, user["id"])}
-                    >
-                      Update User
-                    </button>
-                  </td>
-                  <td>{user["id"]}</td>
-                  <td>
-                    <input
-                      className="user-input firstName"
-                      type="text"
-                      defaultValue={user["profile"]["firstName"]}
-                      readOnly
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className="user-input lastName"
-                      type="text"
-                      defaultValue={user["profile"]["lastName"]}
-                      readOnly
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className="user-input email"
-                      type="text"
-                      defaultValue={user["profile"]["email"]}
-                      readOnly
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className="user-input login"
-                      type="text"
-                      defaultValue={user["profile"]["login"]}
-                      readOnly
-                    />
-                  </td>
-
-                  <td className="user-groups">{"Loading groups..."}</td>
-
-                  <td>
-                    {
-                      <button
-                        className="user-delete-btn"
-                        onClick={() =>
-                          deleteUser(user["id"], user["profile"]["login"])
-                        }
-                      >
-                        Delete User
-                      </button>
-                    }
-                    {
-                      <button
-                        className="user-save-btn"
-                        hidden
-                        onClick={() => saveUpdate(user["id"])}
-                      >
-                        Save
-                      </button>
-                    }
-                    {
-                      <button
-                        className="user-cancel-save-btn"
-                        hidden
-                        onClick={() => cancelSave(user["id"])}
-                      >
-                        Cancel
-                      </button>
-                    }
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
-            <tr>
-              <td>Null</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
     </div>
   );
 };

@@ -1,55 +1,19 @@
-html {
-  height: 100%;
-}
 body {
   height: 100%;
   background-image: url("./images/mountain-bg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-container {
   flex-grow: 1;
   height: 100%;
 }
+
 #root {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
-
-/* table {
-  table-layout: fixed;
-  width: 100%;
-  margin-top: 1rem;
-}
-th,
-tr,
-td {
-  border: 1px black solid;
-  word-wrap: break-word;
-}
-
-input {
-  text-align: center;
-  word-wrap: break-word;
-  width: 100%;
-}
-
-.edit-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-
-.create-form {
-  width: 50%;
-  border: 1px black solid;
-}
-
-.create-form > * {
-  margin: 0.5rem 0 0.5rem 0;
-  width: 100%;
-} */
