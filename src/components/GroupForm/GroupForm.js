@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useOktaAuth } from "@okta/okta-react";
+import "./GroupForm.css";
 
 export default (props) => {
   const { authState, oktaAuth } = useOktaAuth();
 
   const [users, setUsers] = useState(null);
   const [groups, setGroups] = useState(null);
+  const [localGroups, setLocalGroups] = useState(null);
   const [userId, setUserId] = useState("");
   const [groupId, setGroupId] = useState("");
   const [name, setName] = useState("");
   const [group, setGroup] = useState("");
   const [prep, setPrep] = useState("to");
-  const [op, setOp] = useState("PUT");
-  const [verb, setVerb] = useState("Add");
+  const [op, setOp] = useState("");
+  const [verb, setVerb] = useState("");
   const [groupName, setGroupName] = useState("");
   const [groupDescr, setGroupDescr] = useState("");
 
@@ -50,27 +52,57 @@ export default (props) => {
   ) => {
     const okToAdd = window.confirm(`${verb} ${name} ${prep} ${group} group?`);
     if (okToAdd) {
-      if (authState.isAuthenticated) {
-        const accessToken = authState.accessToken["value"];
-        const headers = new Headers();
-        const method = op;
-        headers.append("Authorization", `Bearer ${accessToken}`);
-        headers.append("Content-Type", "application/json");
-        const options = {
-          method,
-          headers
-        };
-        fetch(`${groups_endpoint}/${groupId}/users/${userId}`, options)
-          .then((res) => res.text())
-          .then((data) => window.location.reload())
-          .catch((err) => console.log(err));
+      if (op && groupId && userId) {
+        if (authState.isAuthenticated) {
+          const accessToken = authState.accessToken["value"];
+          const headers = new Headers();
+          const method = op;
+          headers.append("Authorization", `Bearer ${accessToken}`);
+          headers.append("Content-Type", "application/json");
+          const options = {
+            method,
+            headers
+          };
+          fetch(`${groups_endpoint}/${groupId}/users/${userId}`, options)
+            .then((res) => res.text())
+            .then((data) => window.location.reload())
+            .catch((err) => console.log(err));
+        }
+      } else {
+        alert("Make sure a value is selected for each input.");
       }
     }
   };
+  const refreshComponents = () => {
+    const opInput = document.getElementById("group-op-select");
+    const userInput = document.getElementById("user-select");
+    const groupInput = document.getElementById("group-select");
 
+    opInput.contentWindow.location.reload();
+  };
   const updateUserId = (event) => {
     setName(event.target.options[event.target.selectedIndex].text);
     setUserId(event.target.value);
+  };
+
+  const getUserGroups = () => {
+    if (op === "DELETE" && userId && authState.isAuthenticated) {
+      const accessToken = authState.accessToken["value"];
+      const method = "GET";
+      const headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`
+      };
+      const options = {
+        method,
+        headers
+      };
+      fetch(`${users_endpoint}/${userId}/groups`, options)
+        .then((res) => res.json())
+        .then((data) => setLocalGroups(data))
+        .catch((err) => console.log(err));
+    }
   };
 
   const updateGroupId = (event) => {
@@ -98,9 +130,12 @@ export default (props) => {
         .then((data) => {
           let parent = document.getElementById(groupId);
           let td = parent.querySelector(".group-members-td");
-          let members = data
-            .map((obj) => `<li>${obj["profile"]["login"]}</li>`)
-            .join("\n");
+          let members =
+            '<ol id="group-members-list">' +
+            data
+              .map((obj) => `<li>${obj["profile"]["login"]}</li>`)
+              .join("\n") +
+            "</ol>";
           td.innerHTML = members;
           // console.log(data);
         })
@@ -175,28 +210,71 @@ export default (props) => {
     setGroupDescr(event.target.value);
   };
 
+  const toggleView = (view, edit, add) => {
+    const viewContainer = document.getElementById("group-table-container");
+    const editContainer = document.getElementById("edit-group-users-container");
+    const addContainer = document.getElementById("create-form-container");
+
+    const viewDisplay = view ? "block" : "none";
+    const editDisplay = edit ? "block" : "none";
+    const addDisplay = add ? "block" : "none";
+    viewContainer.setAttribute("style", `display:${viewDisplay}`);
+    editContainer.setAttribute("style", `display:${editDisplay}`);
+    addContainer.setAttribute("style", `display:${addDisplay}`);
+  };
+
+  const viewGroupsClicked = () => {
+    toggleView(true, false, false);
+  };
+
+  const editGroupsClicked = () => {
+    toggleView(false, true, false);
+  };
+
+  const createGroupsClicked = () => {
+    toggleView(false, false, true);
+  };
+
   useEffect(() => {
     getUsersAndGroups();
-  }, [oktaAuth]);
+    getUserGroups(userId);
+  }, [oktaAuth, userId, op, groupId]);
 
   return (
-    <div className="edit-form">
-      <h2>Group Management</h2>
-      <div className="create-form">
-        <input onChange={handleGroupName} placeholder="Enter a group name" />
-        <input
-          onChange={handleGroupDescr}
-          placeholder="Enter a group description"
-        />
-        <button onClick={createGroup}>Create Group</button>
+    <div id="group-form-container">
+      <h2 id="group-form-title">Group Management</h2>
+      <div id="crud-button-group">
+        <button
+          id="view-groups-button"
+          className="btn btn-info"
+          onClick={viewGroupsClicked}
+        >
+          View Groups
+        </button>
+        <button
+          id="edit-groups-button"
+          className="btn btn-primary"
+          onClick={editGroupsClicked}
+        >
+          Edit Group
+        </button>
+        <button
+          id="create-groups-button"
+          className="btn btn-success"
+          onClick={createGroupsClicked}
+        >
+          Create New Group
+        </button>
       </div>
-      <div id="group-div">
-        <table>
+
+      <div id="group-table-container">
+        <table id="groups-table">
           <thead>
             <tr>
               <th>Group ID</th>
-              <th>Group Name</th>
+              <th className="borders">Group Name</th>
               <th>Group Members</th>
+              {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
@@ -205,14 +283,17 @@ export default (props) => {
                 getGroupMembers(group["id"]);
                 return (
                   <tr key={group["id"]} id={group["id"]}>
-                    <td>{group["id"]}</td>
-                    <td>{group["profile"]["name"]}</td>
-                    <td className="group-members-td"></td>
-                    <td>
+                    <td className="data-td">{group["id"]}</td>
+                    <td className="data-td borders">
+                      {group["profile"]["name"]}
+                    </td>
+                    <td className="group-members-td data-td"></td>
+                    <td className="delete-group-btn-td">
                       <button
                         onClick={() =>
                           deleteGroup(group["id"], group["profile"]["name"])
                         }
+                        className="btn btn-danger del-grp-btn"
                       >
                         Delete Group
                       </button>
@@ -226,22 +307,42 @@ export default (props) => {
           </tbody>
         </table>
       </div>
-      <div id="user-group-div">
+      <div id="create-form-container">
+        <input
+          onChange={handleGroupName}
+          placeholder="Enter a group name"
+          id="create-group-name-input"
+        />
+        <input
+          onChange={handleGroupDescr}
+          placeholder="Enter a group description"
+          id="create-group-descr-input"
+        />
+        <button onClick={createGroup} id="create-group-button">
+          Create Group
+        </button>
+      </div>
+      <div id="edit-group-users-container">
         <select
           id="group-op-select"
           name="group-op-select"
-          defaultValue="PUT"
+          defaultValue=""
           onChange={handleGroupOps}
+          className="form-control"
         >
+          <option value="">Select Operation</option>
           <option value="PUT">Add</option>
           <option value="DELETE">Remove</option>
         </select>
-        <label htmlFor="users">user</label>
+        <label htmlFor="users">
+          <span class="edit-static-text">user</span>
+        </label>
         <select
           id="user-select"
           name="users"
           onChange={updateUserId}
           value={userId}
+          className="form-control"
         >
           <option value="">Select a User</option>
           {users
@@ -249,19 +350,28 @@ export default (props) => {
                 <option
                   value={user["id"]}
                   key={user["id"]}
-                >{`${user["profile"]["firstName"]} ${user["profile"]["lastName"]}`}</option>
+                >{`${user["profile"]["email"]}`}</option>
               ))
             : "Loading users..."}
         </select>
-        <label htmlFor="groups">{`${prep} group`}</label>
+        <label htmlFor="groups">
+          <span className="edit-static-text">{`${prep} group`}</span>
+        </label>
         <select
           id="group-select"
           name="groups"
           onChange={updateGroupId}
           value={groupId}
+          className="form-control"
         >
           <option value="">Select a Group</option>
-          {groups
+          {localGroups && op === "DELETE"
+            ? localGroups.map((group) => (
+                <option value={group["id"]} key={group["id"]}>
+                  {group["profile"]["name"]}
+                </option>
+              ))
+            : groups
             ? groups.map((group) => (
                 <option value={group["id"]} key={group["id"]}>
                   {group["profile"]["name"]}
@@ -269,17 +379,17 @@ export default (props) => {
               ))
             : "Loading groups.."}
         </select>
-        {userId && groupId ? (
+        {
           <button
             onClick={() =>
               updateUserGroupMembership(op, groupId, userId, name, group)
             }
+            id="edit-group-submit-btn"
+            className="btn btn-primary"
           >
             Submit
           </button>
-        ) : (
-          <div></div>
-        )}
+        }
       </div>
     </div>
   );

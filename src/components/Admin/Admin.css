@@ -5,10 +5,12 @@
   flex-direction: column;
   justify-content: center;
   color: white;
+  border: 1px green solid;
 }
 
 .admin-name {
   font-weight: bold;
+  color: rgb(69, 126, 172);
 }
 
 #admin-welcome-title {

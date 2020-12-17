@@ -6,6 +6,7 @@
 
 #profile-name {
   font-weight: bold;
+  color: rgb(69, 126, 172);
 }
 
 #overall-profile-title {
@@ -41,6 +42,7 @@
 }
 
 .label-cell {
+  color: rgb(69, 126, 172);
   text-align: left;
   padding-right: 1.3rem;
   font-weight: bold;
@@ -89,13 +91,15 @@
 
 .container-title {
   text-align: left;
-  border-bottom: 1px white solid;
+  border-bottom: 1px rgb(69, 126, 172) solid;
   font-weight: bold;
+  padding: 0 0 0.5rem 0;
+  color: rgb(69, 126, 172);
 }
 
 #profile-grid-container {
   grid-area: profile-grid-container;
-  border-right: 1px white solid;
+  border-right: 1px rgb(69, 126, 172) solid;
   display: flex;
   flex-direction: column;
 }
@@ -121,6 +125,10 @@
   outline: none;
 }
 
+#edit-button {
+  background: rgb(69, 126, 172);
+  border-color: rgb(69, 126, 172);
+}
 .prof-btn {
   font-weight: bold;
   margin: 0 1.3rem 0 1.3rem;

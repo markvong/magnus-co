@@ -31,6 +31,8 @@
   padding-top: 0;
   padding-bottom: 0;
   display: flex;
+  background: rgb(69, 126, 172);
+  border-color: rgb(69, 126, 172);
 }
 
 #logo {

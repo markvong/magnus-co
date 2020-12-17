@@ -1,0 +1,107 @@
+#group-form-container {
+  border: 1px red solid;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  /* margin: 1.3rem 0 0 0; */
+  min-height: 100%;
+  padding: 1rem;
+}
+#group-form-title {
+  /* border: 1px green solid; */
+  /* padding: 0.5rem; */
+  align-self: flex-start;
+  width: 100%;
+  text-align: left;
+  /* color: rgb(69, 126, 172); */
+  font-weight: bold;
+  /* background: rgba(255, 255, 255, 0.1); */
+
+  /* border-bottom: 1px white solid; */
+}
+#crud-button-group {
+  width: 100%;
+  text-align: left;
+  /* display: flex;
+  flex-direction: column;
+  border: 1px yellow solid;
+  width: 10%;
+  align-self: flex-start; */
+  /* border-bottom: 1px white solid; */
+}
+
+#crud-button-group > * {
+  margin: 0 0.5rem 0 0;
+  font-weight: bold;
+  background: none;
+}
+
+#group-table-container {
+  /* border: 1px red solid; */
+  display: none;
+}
+
+#groups-table {
+  /* border: 1px red solid; */
+  /* background: rgba(0, 0, 0, 0.7); */
+  margin: 1rem 0 0 0;
+}
+
+.borders {
+  border-right: 1px rgb(69, 126, 172) solid;
+  border-left: 1px rgb(69, 126, 172) solid;
+}
+.data-td {
+  /* margin: 0 1rem 1rem 0; */
+  border-bottom: 1px rgb(69, 126, 172) solid;
+  /* border: 1px white solid; */
+  padding: 0.5rem;
+}
+th {
+  border-bottom: 1px rgb(69, 126, 172) solid;
+  color: rgb(69, 126, 172);
+}
+.group-members-td > * {
+  /* list-style: none; */
+  text-align: left;
+  /* border: 1px red solid; */
+  margin: 0;
+}
+.delete-group-btn-td {
+  /* border: 1px red solid; */
+  /* vertical-align: bottom; */
+  /* border-bottom: 1px white solid; */
+}
+
+.del-grp-btn {
+  font-weight: bold;
+  margin: 0 0 0 1.3rem;
+}
+
+#create-form-container {
+  display: none;
+}
+
+#edit-group-users-container {
+  /* display: none; */
+  /* border: 1px red solid; */
+  /* width: 100%; */
+}
+
+#edit-group-users-container > * {
+  font-size: 1.3rem;
+  /* border: 1px red solid; */
+  margin: 1rem 0 0 0;
+}
+
+.edit-static-text {
+  font-weight: bold;
+  color: rgb(69, 126, 172);
+}
+
+#edit-group-submit-btn {
+  font-weight: bold;
+  background: rgb(69, 126, 172);
+  border-color: rgb(69, 126, 172);
+}
