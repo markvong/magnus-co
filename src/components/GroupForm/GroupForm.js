@@ -8,6 +8,7 @@ export default (props) => {
   const [users, setUsers] = useState(null);
   const [groups, setGroups] = useState(null);
   const [localGroups, setLocalGroups] = useState(null);
+  const [missingGroups, setMissingGroups] = useState(null);
   const [userId, setUserId] = useState("");
   const [groupId, setGroupId] = useState("");
   const [name, setName] = useState("");
@@ -73,13 +74,7 @@ export default (props) => {
       }
     }
   };
-  const refreshComponents = () => {
-    const opInput = document.getElementById("group-op-select");
-    const userInput = document.getElementById("user-select");
-    const groupInput = document.getElementById("group-select");
 
-    opInput.contentWindow.location.reload();
-  };
   const updateUserId = (event) => {
     setName(event.target.options[event.target.selectedIndex].text);
     setUserId(event.target.value);
@@ -101,6 +96,34 @@ export default (props) => {
       fetch(`${users_endpoint}/${userId}/groups`, options)
         .then((res) => res.json())
         .then((data) => setLocalGroups(data))
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const getUserMissingGroups = () => {
+    if (op === "PUT" && userId && groups && authState.isAuthenticated) {
+      const accessToken = authState.accessToken["value"];
+      const method = "GET";
+      const headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`
+      };
+      const options = {
+        method,
+        headers
+      };
+      fetch(`${users_endpoint}/${userId}/groups`, options)
+        .then((res) => res.json())
+        .then((data) => {
+          const missing = groups.filter(
+            (group) =>
+              !data
+                .map((group) => group["profile"]["name"])
+                .includes(group["profile"]["name"])
+          );
+          setMissingGroups(missing);
+        })
         .catch((err) => console.log(err));
     }
   };
@@ -246,7 +269,8 @@ export default (props) => {
 
   useEffect(() => {
     getUsersAndGroups();
-    getUserGroups(userId);
+    getUserGroups();
+    getUserMissingGroups();
   }, [oktaAuth, userId, op, groupId]);
 
   return (
@@ -389,6 +413,12 @@ export default (props) => {
           <option value="">Select a Group</option>
           {localGroups && op === "DELETE"
             ? localGroups.map((group) => (
+                <option value={group["id"]} key={group["id"]}>
+                  {group["profile"]["name"]}
+                </option>
+              ))
+            : missingGroups && op === "PUT"
+            ? missingGroups.map((group) => (
                 <option value={group["id"]} key={group["id"]}>
                   {group["profile"]["name"]}
                 </option>
