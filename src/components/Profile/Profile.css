@@ -129,9 +129,10 @@
   background: rgb(69, 126, 172);
   border-color: rgb(69, 126, 172);
 }
+
 .prof-btn {
   font-weight: bold;
   margin: 0 1.3rem 0 1.3rem;
   font-size: 1.1rem;
-  margin-bottom: 5rem;
+  margin-bottom: 9rem;
 }

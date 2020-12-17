@@ -61,6 +61,8 @@ export default () => {
     getUserGroups();
   }, [oktaAuth]);
 
+  if (authState.isPending) return null;
+
   const isAdmin =
     userInfo &&
     profileInfo &&
