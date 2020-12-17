@@ -28,6 +28,16 @@ const Profile = () => {
     }
   };
 
+  const getGroupClaim = () => {
+    const myUrl =
+      "https://dev-8181045.okta.com/oauth2/v1/authorize?client_id=0oa22p39epMCbnVSN5d6&response_type=id_token&scope=openid%20groups&redirect_uri=http://localhost:3000/login/callback&state=myState&nonce=myNonceValue";
+
+    fetch(myUrl)
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  };
+
   const getUserInfo = async () => {
     if (authState.isAuthenticated) {
       const accessToken = authState.accessToken["value"];
@@ -157,6 +167,7 @@ const Profile = () => {
     checkUser();
     getUserInfo();
     getUserGroups();
+    getGroupClaim();
   }, [oktaAuth]);
 
   const name = loginInfo

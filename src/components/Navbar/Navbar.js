@@ -103,7 +103,7 @@ const Navbar = () => {
           Administration
         </Link>
         <a
-          href="https://dev-8181045.okta.com/app/UserHome"
+          href="https://dev-8181045.okta.com/app/UserHome?fromAdmin=true"
           target="_blank"
           className="nav-link"
         >

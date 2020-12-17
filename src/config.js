@@ -17,6 +17,7 @@ export default {
     scopes: [
       "openid",
       "email",
+      "groups",
       "okta.users.read",
       "okta.users.manage",
       "okta.users.manage.self",
