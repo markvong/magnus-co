@@ -372,7 +372,7 @@ export default (props) => {
                 <option
                   value={user["id"]}
                   key={user["id"]}
-                >{`${user["profile"]["email"]}`}</option>
+                >{`${user["profile"]["login"]}`}</option>
               ))
             : "Loading users..."}
         </select>
