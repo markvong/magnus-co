@@ -10,6 +10,7 @@ export default () => {
   const [lastName, setLastName] = useState("");
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
+  const [memberId, setMemberId] = useState("");
 
   const [users, setUsers] = useState("");
 
@@ -33,8 +34,19 @@ export default () => {
     setEmail(e.target.value);
   };
 
+  const handleMemberId = (e) => {
+    setMemberId(e.target.value);
+  };
+
   const createUser = (e) => {
-    if (firstName && lastName && login && email && authState.isAuthenticated) {
+    if (
+      firstName &&
+      lastName &&
+      login &&
+      email &&
+      memberId &&
+      authState.isAuthenticated
+    ) {
       let okToAdd = window.confirm(`Create user ${login}?`);
       if (okToAdd) {
         const accessToken = authState.accessToken["value"];
@@ -48,7 +60,8 @@ export default () => {
             firstName: firstName,
             lastName: lastName,
             email: email,
-            login: login
+            login: login,
+            memberId: memberId
           }
         });
         console.log(body);
@@ -299,6 +312,7 @@ export default () => {
             <tr>
               <th></th>
               <th>User ID</th>
+              <th className="borders">Member ID</th>
               <th className="borders">First Name</th>
               <th className="borders">Last Name </th>
               <th className="borders">Email</th>
@@ -322,6 +336,9 @@ export default () => {
                       </button>
                     </td>
                     <td className="user-data-td">{user["id"]}</td>
+                    <td className="user-data-td borders">
+                      {user["profile"]["memberId"]}
+                    </td>
                     <td className="borders user-data-td">
                       <input
                         className="user-input firstName form-control"
@@ -420,6 +437,11 @@ export default () => {
           onChange={handleLogin}
           placeholder="Enter a login username"
           id="login-input"
+        />
+        <input
+          onChange={handleMemberId}
+          placeholder="Enter a valid member ID"
+          id="member-id-input"
         />
         <button
           onClick={createUser}

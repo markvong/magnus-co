@@ -357,7 +357,7 @@ export default (props) => {
           <option value="DELETE">Remove</option>
         </select>
         <label htmlFor="users">
-          <span class="edit-static-text">user</span>
+          <span className="edit-static-text">user</span>
         </label>
         <select
           id="user-select"
