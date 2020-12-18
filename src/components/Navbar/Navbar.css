@@ -41,6 +41,11 @@
   border-color: rgb(69, 126, 172);
 }
 
+.nav-log-btn:hover {
+  border-color: rgb(69, 126, 172);
+  background: rgb(69, 126, 172);
+}
+
 #logo {
   outline: none;
   height: 2.1rem;

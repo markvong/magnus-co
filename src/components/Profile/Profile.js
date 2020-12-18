@@ -192,7 +192,7 @@ const Profile = () => {
   const cancelBtn = (
     <button
       id="cancel-button"
-      className="btn btn-warning prof-btn"
+      className="btn btn-danger prof-btn"
       onClick={cancelBtnClicked}
     >
       Cancel

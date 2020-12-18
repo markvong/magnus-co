@@ -100,7 +100,12 @@ const Navbar = () => {
         </Link>
       </div>
       <div id="links-div">
-        <Link to="/" className="nav-link" id="home" onClick={handleLinkClicked}>
+        <Link
+          to="/"
+          className="nav-link current"
+          id="home"
+          onClick={handleLinkClicked}
+        >
           Home
         </Link>
         <Link

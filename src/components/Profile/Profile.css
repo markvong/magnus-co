@@ -125,8 +125,12 @@
   outline: none;
 }
 
-#edit-button {
+#edit-button:hover {
   background: rgb(69, 126, 172);
+  border-color: rgb(69, 126, 172);
+}
+
+#edit-button {
   border-color: rgb(69, 126, 172);
 }
 
