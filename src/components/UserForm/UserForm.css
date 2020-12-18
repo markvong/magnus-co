@@ -16,6 +16,10 @@
   align-self: flex-start;
 }
 
+#view-users-button {
+  background: #117a8b;
+}
+
 #crud-button-users > * {
   margin: 0 1rem 0 0;
   font-weight: bold;

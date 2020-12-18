@@ -262,12 +262,24 @@ export default () => {
     getUsers();
   }, [oktaAuth]);
 
+  const toggleButtons = () => {
+    const viewButton = document.getElementById("view-users-button");
+    const createButton = document.getElementById("create-user-button");
+
+    const viewBg = !viewUsers ? "#117a8b" : "none";
+    const createBg = viewUsers ? "#1e7e34" : "none";
+
+    viewButton.setAttribute("style", `background:${viewBg}`);
+    createButton.setAttribute("style", `background:${createBg}`);
+  };
+
   const viewUsersClicked = () => {
     const viewTableContainer = document.getElementById("users-table-container");
     const createUsersContainer = document.getElementById("create-form");
     if (!viewUsers) {
       viewTableContainer.setAttribute("style", "display: block");
       createUsersContainer.setAttribute("style", "display:none");
+      toggleButtons();
       setViewUsers(!viewUsers);
     }
   };
@@ -281,6 +293,7 @@ export default () => {
         "style",
         "display:flex; flex-direction:column;"
       );
+      toggleButtons();
       setViewUsers(!viewUsers);
     }
   };

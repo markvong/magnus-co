@@ -233,6 +233,19 @@ export default (props) => {
     setGroupDescr(event.target.value);
   };
 
+  const toggleButton = (view, edit, add) => {
+    const viewButton = document.getElementById("view-groups-button");
+    const editButton = document.getElementById("edit-groups-button");
+    const createButton = document.getElementById("create-groups-button");
+
+    const viewBg = view ? "#117a8b" : "none";
+    const editBg = edit ? "#0062cc" : "none";
+    const addBg = add ? "#1e7e34" : "none";
+
+    viewButton.setAttribute("style", `background:${viewBg}`);
+    editButton.setAttribute("style", `background:${editBg}`);
+    createButton.setAttribute("style", `background:${addBg}`);
+  };
   const toggleView = (view, edit, add) => {
     const viewContainer = document.getElementById("group-table-container");
     const editContainer = document.getElementById("edit-group-users-container");
@@ -248,14 +261,17 @@ export default (props) => {
 
   const viewGroupsClicked = () => {
     toggleView(true, false, false);
+    toggleButton(true, false, false);
   };
 
   const editGroupsClicked = () => {
     toggleView(false, true, false);
+    toggleButton(false, true, false);
   };
 
   const createGroupsClicked = () => {
     toggleView(false, false, true);
+    toggleButton(false, false, true);
   };
 
   const cancelCreateGroup = () => {
