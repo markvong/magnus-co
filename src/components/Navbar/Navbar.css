@@ -14,6 +14,11 @@
   outline: none;
 }
 
+.current,
+.nav-link:hover {
+  color: rgb(69, 126, 172);
+}
+
 #logo-div {
   vertical-align: bottom;
 }

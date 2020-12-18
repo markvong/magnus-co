@@ -61,6 +61,13 @@ const Navbar = () => {
     }
   };
 
+  const handleLinkClicked = (e) => {
+    e.target.classList.add("current");
+    Array.from(document.querySelectorAll("a"))
+      .filter((a) => a !== e.target)
+      .forEach((a) => a.classList.remove("current"));
+  };
+
   const loginBtn = (
     <button onClick={login} className="nav-log-btn btn btn-primary">
       Login
@@ -93,19 +100,31 @@ const Navbar = () => {
         </Link>
       </div>
       <div id="links-div">
-        <Link to="/" className="nav-link">
+        <Link to="/" className="nav-link" id="home" onClick={handleLinkClicked}>
           Home
         </Link>
-        <Link to="/profile" className="nav-link">
+        <Link
+          to="/profile"
+          className="nav-link"
+          id="profile"
+          onClick={handleLinkClicked}
+        >
           Profile
         </Link>
-        <Link to="/admin" className="nav-link">
+        <Link
+          to="/admin"
+          className="nav-link"
+          id="admin"
+          onClick={handleLinkClicked}
+        >
           Administration
         </Link>
         <a
           href="https://dev-8181045.okta.com/app/UserHome?fromAdmin=true"
           target="_blank"
           className="nav-link"
+          id="okta"
+          onClick={handleLinkClicked}
         >
           Okta Apps
         </a>
