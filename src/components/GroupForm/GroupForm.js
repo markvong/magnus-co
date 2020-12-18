@@ -362,7 +362,7 @@ export default (props) => {
         </button>
         <button
           id="cancel-create-group-button"
-          className="btn btn-warning"
+          className="btn btn-danger"
           onClick={cancelCreateGroup}
         >
           Cancel

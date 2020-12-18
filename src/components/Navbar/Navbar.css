@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: flex-end;
   flex-wrap: wrap;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
   padding: 0.5rem;
 }
 .logo-link,
@@ -30,8 +30,9 @@
 .nav-log-btn {
   padding-top: 0;
   padding-bottom: 0;
-  display: flex;
-  background: rgb(69, 126, 172);
+  /* display: flex; */
+  /* background: rgb(69, 126, 172); */
+  background: none;
   border-color: rgb(69, 126, 172);
 }
 

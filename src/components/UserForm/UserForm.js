@@ -398,7 +398,7 @@ export default () => {
                       }
                       {
                         <button
-                          className="user-cancel-save-btn user-btn btn btn-warning"
+                          className="user-cancel-save-btn user-btn btn btn-danger"
                           hidden
                           onClick={() => cancelSave(user["id"])}
                         >
@@ -452,7 +452,7 @@ export default () => {
         </button>
         <button
           id="cancel-user-create-btn"
-          className="btn btn-warning user-btn"
+          className="btn btn-danger user-btn"
           onClick={cancelCreateUser}
         >
           Cancel

@@ -19,7 +19,7 @@
 #crud-button-users > * {
   margin: 0 1rem 0 0;
   font-weight: bold;
-  background: none;
+  /* background: none; */
 }
 
 #users-table-container {
@@ -32,7 +32,7 @@
 }
 
 .user-update-btn {
-  background: rgb(69, 126, 172);
+  /* background: rgb(69, 126, 172); */
   border-color: rgb(69, 126, 172);
 }
 
@@ -50,7 +50,7 @@
 }
 
 #create-user-btn {
-  background: rgb(69, 126, 172);
+  /* background: rgb(69, 126, 172); */
   border-color: rgb(69, 126, 172);
 }
 .user-data-td {
