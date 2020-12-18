@@ -62,3 +62,8 @@
   border-top: 1px rgb(69, 126, 172) solid;
   border-bottom: 1px rgb(69, 126, 172) solid;
 }
+
+#user-status-message {
+  font-size: 1.5rem;
+  margin: 1.3rem 0 0 0;
+}

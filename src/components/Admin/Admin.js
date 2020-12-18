@@ -10,9 +10,11 @@ export default () => {
   const [profileInfo, setProfileInfo] = useState(null);
   const [userGroups, setUserGroups] = useState(null);
 
+  const [editsMade, setEditsMade] = useState(false);
+
   const curr_user_endpoint = `https://dev-8181045.okta.com/api/v1/users/me`;
 
-  const getUserInfo = async () => {
+  const getUserInfo = () => {
     if (!authState.isAuthenticated) {
       setUserInfo(null);
     } else if (authState.isAuthenticated && !userInfo) {
@@ -22,7 +24,7 @@ export default () => {
     }
   };
 
-  const getProfileInfo = async () => {
+  const getProfileInfo = () => {
     if (authState.isAuthenticated) {
       const accessToken = authState.accessToken["value"];
       const options = {
@@ -37,7 +39,7 @@ export default () => {
     }
   };
 
-  const getUserGroups = async () => {
+  const getUserGroups = () => {
     if (authState.isAuthenticated) {
       const accessToken = authState.accessToken["value"];
       const options = {
@@ -59,7 +61,7 @@ export default () => {
     getUserInfo();
     getProfileInfo();
     getUserGroups();
-  }, [oktaAuth]);
+  }, [oktaAuth, editsMade]);
 
   if (authState.isPending) return null;
 
@@ -80,8 +82,8 @@ export default () => {
               {profileInfo["profile"]["lastName"]}
             </span>
           </h3>
-          <GroupForm />
-          <UserForm />
+          <GroupForm setEditsMade={setEditsMade} editsMade={editsMade} />
+          <UserForm setEditsMade={setEditsMade} editsMade={editsMade} />
         </div>
       ) : (
         <h3>You need administrator privileges to view this page.</h3>

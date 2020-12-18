@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useOktaAuth } from "@okta/okta-react";
 import "./UserForm.css";
 
-export default () => {
+export default (props) => {
   const users_endpoint = "https://dev-8181045.okta.com/api/v1/users";
   const { authState, oktaAuth } = useOktaAuth();
 
@@ -14,9 +14,38 @@ export default () => {
 
   const [users, setUsers] = useState("");
 
-  const [userGroups, setUserGroups] = useState([]);
-
   const [viewUsers, setViewUsers] = useState(true);
+
+  const [statusMessage, setStatusMessage] = useState("");
+  const [statusClass, setStatusClass] = useState("");
+
+  const clearCreateVals = () => {
+    const fNameInput = document.getElementById("first-name-input");
+    const lNameInput = document.getElementById("last-name-input");
+    const emailInput = document.getElementById("email-input");
+    const loginInput = document.getElementById("login-input");
+    const memberIdInput = document.getElementById("member-id-input");
+    fNameInput.value = "";
+    lNameInput.value = "";
+    emailInput.value = "";
+    loginInput.value = "";
+    memberIdInput.value = "";
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setLogin("");
+    setMemberId("");
+  };
+
+  const clearStatusAfter = (ms) => {
+    setTimeout(
+      () => {
+        setStatusMessage("");
+        setStatusClass("");
+      },
+      ms ? ms : 5000
+    );
+  };
 
   const handleFN = (e) => {
     setFirstName(e.target.value);
@@ -36,6 +65,21 @@ export default () => {
 
   const handleMemberId = (e) => {
     setMemberId(e.target.value);
+  };
+
+  const updateCreateStatus = (success, login, err) => {
+    if (success) {
+      setStatusClass("success");
+      setStatusMessage(`Successfully created user ${login}.`);
+      clearCreateVals();
+    } else {
+      setStatusClass("fail");
+      setStatusMessage(
+        err ? `Error: ${err}.` : `Error: could not create user ${login}.`
+      );
+    }
+    props.setEditsMade(!props.editsMade);
+    clearStatusAfter();
   };
 
   const createUser = (e) => {
@@ -64,7 +108,7 @@ export default () => {
             memberId: memberId
           }
         });
-        console.log(body);
+
         const options = {
           method,
           headers,
@@ -72,21 +116,36 @@ export default () => {
         };
 
         fetch(`${users_endpoint}/?activate=false`, options)
-          .then((res) => res.json())
-          .then((data) => {
-            {
-              console.log(data);
-              window.location.reload();
+          .then((res) => {
+            if (res.status === 200) {
+              return "OK";
+            } else {
+              return res.json();
             }
           })
-          .catch((e) => console.log(e));
-      } else {
-        console.log("Cancel");
+          .then((data) => {
+            {
+              if (data === "OK") {
+                updateCreateStatus(true, login);
+              } else if (data.errorCode === "E0000001") {
+                updateCreateStatus(
+                  false,
+                  login,
+                  `${data.errorCode}: This username already exists`
+                );
+              } else {
+                updateCreateStatus(
+                  false,
+                  login,
+                  `${data.erroCode}: ${data.errorSummary}`
+                );
+              }
+            }
+          })
+          .catch((err) => updateCreateStatus(false, login, err));
       }
-
-      console.log(firstName, lastName, login, email);
     } else {
-      alert("Please fill in all the fields.");
+      updateCreateStatus(false, login, "Please fill in all fields");
     }
   };
 
@@ -101,12 +160,31 @@ export default () => {
 
       fetch(users_endpoint, options)
         .then((res) => res.json())
-        .then((data) => setUsers(data))
+        .then((data) => {
+          setUsers(data);
+          data.forEach((user) => {
+            getUserGroups(user["id"]);
+          });
+        })
         .catch((err) => console.log(err));
     }
   };
 
-  const deleteUser = (userId, email) => {
+  const updateDeleteStatus = (success, login, err) => {
+    if (success) {
+      setStatusClass("success");
+      setStatusMessage(`Successfully deleted user ${login}.`);
+    } else {
+      setStatusClass("fail");
+      setStatusMessage(
+        err ? `Error: ${err}` : `Error: could not delete user ${login}.`
+      );
+    }
+    clearStatusAfter();
+    props.setEditsMade(!props.editsMade);
+  };
+
+  const deleteUser = (userId, login) => {
     if (authState.isAuthenticated) {
       const accessToken = authState.accessToken["value"];
       const method = "DELETE";
@@ -118,7 +196,7 @@ export default () => {
       };
 
       let okToDelete = window.confirm(
-        `Are you sure you want to delete user ${email}?`
+        `Are you sure you want to delete user ${login}?`
       );
       if (okToDelete) {
         fetch(`${users_endpoint}/${userId}`, options)
@@ -127,22 +205,20 @@ export default () => {
             // run again to delete perm
             fetch(`${users_endpoint}/${userId}`, options)
               .then((res) => res.text())
-              .then((data) => window.location.reload());
+              .then((data) => updateDeleteStatus(true, login))
+              .catch((err) => updateDeleteStatus(false, login, err));
           });
-      } else {
-        console.log("Delete canceled");
       }
     }
   };
 
   const updateUser = (event, userId) => {
     let parent = document.getElementById(userId);
-    console.log(
-      parent.querySelectorAll(".user-input").forEach((input) => {
-        input.removeAttribute("readonly");
-        input.setAttribute("style", "background:yellow");
-      })
-    );
+
+    parent.querySelectorAll(".user-input").forEach((input) => {
+      input.removeAttribute("readonly");
+      input.setAttribute("style", "background:yellow");
+    });
 
     parent.querySelector(".user-delete-btn").setAttribute("hidden", "");
     parent.querySelector(".user-save-btn").removeAttribute("hidden");
@@ -164,18 +240,25 @@ export default () => {
   };
 
   const cancelCreateUser = () => {
-    const fNameInput = document.getElementById("first-name-input");
-    const lNameInput = document.getElementById("last-name-input");
-    const emailInput = document.getElementById("email-input");
-    const loginInput = document.getElementById("login-input");
-    fNameInput.value = "";
-    lNameInput.value = "";
-    emailInput.value = "";
-    loginInput.value = "";
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setLogin("");
+    clearCreateVals();
+  };
+
+  const updateSaveStatus = (success, login, err) => {
+    if (success) {
+      setStatusClass("success");
+      setStatusMessage(
+        `Successfully updated profile information for user ${login}.`
+      );
+    } else {
+      setStatusClass("fail");
+      setStatusMessage(
+        err
+          ? `Error: ${err}`
+          : `Error: could not update profile information for ${login}.`
+      );
+    }
+    props.setEditsMade(!props.editsMade);
+    clearStatusAfter();
   };
 
   const saveUpdate = (userId) => {
@@ -189,7 +272,7 @@ export default () => {
       const email = userInputs[2].value;
       const login = userInputs[3].value;
       const okToSave = window.confirm(
-        "Are you sure you want to save changes for this user?"
+        `Are you sure you want to save changes for user ${login}?`
       );
       if (okToSave) {
         parent.querySelectorAll(".user-input").forEach((input) => {
@@ -199,6 +282,9 @@ export default () => {
 
         parent.querySelector(".user-delete-btn").removeAttribute("hidden");
         parent.querySelector(".user-save-btn").setAttribute("hidden", "");
+        parent
+          .querySelector(".user-cancel-save-btn")
+          .setAttribute("hidden", "");
         parent.querySelector(".user-update-btn").removeAttribute("disabled");
 
         if (authState.isAuthenticated) {
@@ -228,16 +314,17 @@ export default () => {
           fetch(`${users_endpoint}/${userId}`, options)
             .then((res) => res.json())
             .then((data) => {
-              console.log(data);
-              window.location.reload();
+              // console.log(data);
+              updateSaveStatus(true, login);
+              // window.location.reload();
             })
-            .catch((err) => console.log(err));
+            .catch((err) => updateSaveStatus(false, login, err));
         }
       }
     }
   };
 
-  const getUserGroups = async (userId) => {
+  const getUserGroups = (userId) => {
     if (authState.isAuthenticated) {
       const accessToken = authState.accessToken["value"];
       const options = {
@@ -258,9 +345,10 @@ export default () => {
         .catch((err) => console.log(err));
     }
   };
+
   useEffect(() => {
     getUsers();
-  }, [oktaAuth]);
+  }, [oktaAuth, props.editsMade]);
 
   const toggleButtons = () => {
     const viewButton = document.getElementById("view-users-button");
@@ -271,6 +359,8 @@ export default () => {
 
     viewButton.setAttribute("style", `background:${viewBg}`);
     createButton.setAttribute("style", `background:${createBg}`);
+
+    clearCreateVals();
   };
 
   const viewUsersClicked = () => {
@@ -297,6 +387,7 @@ export default () => {
       setViewUsers(!viewUsers);
     }
   };
+
   return (
     <div id="user-form-container">
       <h2 id="user-form-title">User Management</h2>
@@ -317,7 +408,9 @@ export default () => {
           Create New User
         </button>
       </div>
-
+      <div id="user-status-message" className={statusClass}>
+        {statusMessage}
+      </div>
       <div id="users-table-container">
         <table>
           {/* <caption>All Users</caption> */}
@@ -337,7 +430,7 @@ export default () => {
           <tbody>
             {users ? (
               users.map((user) => {
-                getUserGroups(user["id"]);
+                // getUserGroups(user["id"]);
                 return (
                   <tr key={user["id"]} id={user["id"]}>
                     <td>

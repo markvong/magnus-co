@@ -18,16 +18,14 @@ export default (props) => {
   const [verb, setVerb] = useState("");
   const [groupName, setGroupName] = useState("");
   const [groupDescr, setGroupDescr] = useState("");
-  const [groupMembers, setGroupMembers] = useState(null);
 
-  const [editsMade, setEditsMade] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [statusClass, setStatusClass] = useState("");
 
   const users_endpoint = "https://dev-8181045.okta.com/api/v1/users";
   const groups_endpoint = "https://dev-8181045.okta.com/api/v1/groups";
 
-  const getUsersAndGroups = async () => {
+  const getUsersAndGroups = () => {
     if (authState.isAuthenticated) {
       const accessToken = authState.accessToken["value"];
       const options = {
@@ -96,11 +94,11 @@ export default (props) => {
           : `Error: could not ${verb.toLowerCase()} ${name} ${prep} ${group} group.`
       );
     }
-    setEditsMade(!editsMade);
+    props.setEditsMade(!props.editsMade);
     clearStatusAfter();
   };
 
-  const updateUserGroupMembership = async () => {
+  const updateUserGroupMembership = () => {
     if (op && groupId && userId) {
       const okToAdd = window.confirm(`${verb} ${name} ${prep} ${group} group?`);
       if (okToAdd) {
@@ -213,7 +211,7 @@ export default (props) => {
       );
     }
     clearStatusAfter();
-    setEditsMade(!editsMade);
+    props.setEditsMade(!props.editsMade);
   };
 
   const deleteGroup = (groupId, groupName) => {
@@ -261,7 +259,7 @@ export default (props) => {
       setStatusClass("fail");
     }
     clearStatusAfter();
-    setEditsMade(!editsMade);
+    props.setEditsMade(!props.editsMade);
   };
 
   const cancelCreateGroup = () => {
@@ -361,7 +359,7 @@ export default (props) => {
 
   useEffect(() => {
     getUsersAndGroups();
-  }, [oktaAuth, authState, editsMade]);
+  }, [oktaAuth, authState, props.editsMade]);
 
   useEffect(() => {
     getUserGroups();
@@ -394,7 +392,7 @@ export default (props) => {
           Create New Group
         </button>
       </div>
-      <div id="status-message" className={statusClass}>
+      <div id="group-status-message" className={statusClass}>
         {statusMessage}
       </div>
       <div id="group-table-container">
