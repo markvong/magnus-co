@@ -83,7 +83,9 @@ export default (props) => {
     if (success) {
       setStatusClass("success");
       setStatusMessage(
-        `Successfully ${verb}ed ${name} ${prep} ${group} group.`
+        `Successfully ${
+          op === "PUT" ? "added" : "removed"
+        } ${name} ${prep} ${group} group.`
       );
       clearEditVals();
     } else {
@@ -91,7 +93,7 @@ export default (props) => {
       setStatusMessage(
         err
           ? `Error: ${err}`
-          : `Error: could not ${verb} ${name} ${prep} ${group} group.`
+          : `Error: could not ${verb.toLowerCase()} ${name} ${prep} ${group} group.`
       );
     }
     setEditsMade(!editsMade);
@@ -203,7 +205,7 @@ export default (props) => {
   const updateDeleteStatus = (success, groupName, err) => {
     if (success) {
       setStatusClass("success");
-      setStatusMessage(`Group: ${groupName} was successfully deleted.`);
+      setStatusMessage(`Successfully deleted group ${groupName}.`);
     } else {
       setStatusClass("fail");
       setStatusMessage(
@@ -249,12 +251,12 @@ export default (props) => {
 
   const updateCreatedStatus = (success) => {
     if (success) {
-      setStatusMessage(`New group: ${groupName} successfully created.`);
+      setStatusMessage(`Successfully created new group: ${groupName}.`);
       setStatusClass("success");
       clearCreateVals();
     } else {
       setStatusMessage(
-        `Could not create group: ${groupName}. Please make sure to provide a valid name.`
+        `Error: could not create group: ${groupName}. Please make sure to provide a valid name.`
       );
       setStatusClass("fail");
     }
