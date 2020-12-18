@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { OktaAuth } from "@okta/okta-auth-js";
-import { LoginCallback, Security } from "@okta/okta-react";
+import { BrowserRouter as Router } from "react-router-dom";
 import AppWithRouterAccess from "./AppWithRouterAccess";
 import "./App.css";
 

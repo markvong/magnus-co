@@ -18,6 +18,11 @@ export default (props) => {
   const [verb, setVerb] = useState("");
   const [groupName, setGroupName] = useState("");
   const [groupDescr, setGroupDescr] = useState("");
+  const [groupMembers, setGroupMembers] = useState(null);
+
+  const [editsMade, setEditsMade] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [statusClass, setStatusClass] = useState("");
 
   const users_endpoint = "https://dev-8181045.okta.com/api/v1/users";
   const groups_endpoint = "https://dev-8181045.okta.com/api/v1/groups";
@@ -39,21 +44,64 @@ export default (props) => {
       //get groups
       fetch(groups_endpoint, options)
         .then((res) => res.json())
-        .then((data) => setGroups(data))
+        .then((data) => {
+          setGroups(data);
+
+          // get group members
+          data.forEach((group) => {
+            fetch(`${groups_endpoint}/${group["id"]}/users`, options)
+              .then((res) => res.json())
+              .then((data) => {
+                let parent = document.getElementById(group["id"]);
+                let td = parent.querySelector(".group-members-td");
+                let members =
+                  '<ol id="group-members-list">' +
+                  data
+                    .map((obj) => `<li>${obj["profile"]["login"]}</li>`)
+                    .join("\n") +
+                  "</ol>";
+                td.innerHTML = members;
+                // console.log(data);
+              })
+              .catch((err) => console.log(err));
+          });
+        })
         .catch((err) => console.log(err));
     }
   };
 
-  const updateUserGroupMembership = async (
-    op,
-    groupId,
-    userId,
-    name,
-    group
-  ) => {
-    const okToAdd = window.confirm(`${verb} ${name} ${prep} ${group} group?`);
-    if (okToAdd) {
-      if (op && groupId && userId) {
+  const clearEditVals = () => {
+    document.getElementById("group-op-select").value = "";
+    document.getElementById("user-select").value = "";
+    document.getElementById("group-select").value = "";
+    setOp("");
+    setUserId("");
+    setGroupId("");
+  };
+
+  const updateUpdateStatus = (success, err) => {
+    if (success) {
+      setStatusClass("success");
+      setStatusMessage(
+        `Successfully ${verb}ed ${name} ${prep} ${group} group.`
+      );
+      clearEditVals();
+    } else {
+      setStatusClass("fail");
+      setStatusMessage(
+        err
+          ? `Error: ${err}`
+          : `Error: could not ${verb} ${name} ${prep} ${group} group.`
+      );
+    }
+    setEditsMade(!editsMade);
+    clearStatusAfter();
+  };
+
+  const updateUserGroupMembership = async () => {
+    if (op && groupId && userId) {
+      const okToAdd = window.confirm(`${verb} ${name} ${prep} ${group} group?`);
+      if (okToAdd) {
         if (authState.isAuthenticated) {
           const accessToken = authState.accessToken["value"];
           const headers = new Headers();
@@ -66,12 +114,15 @@ export default (props) => {
           };
           fetch(`${groups_endpoint}/${groupId}/users/${userId}`, options)
             .then((res) => res.text())
-            .then((data) => window.location.reload())
-            .catch((err) => console.log(err));
+            .then((data) => updateUpdateStatus(true))
+            .catch((err) => updateUpdateStatus(false, err));
         }
-      } else {
-        alert("Make sure a value is selected for each input.");
       }
+    } else {
+      updateUpdateStatus(
+        false,
+        "Make sure a value is selected for each input."
+      );
     }
   };
 
@@ -139,31 +190,28 @@ export default (props) => {
     setVerb(event.target.options[event.target.selectedIndex].text);
   };
 
-  const getGroupMembers = (groupId) => {
-    if (authState.isAuthenticated) {
-      const accessToken = authState.accessToken["value"];
-      const options = {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      };
+  const clearStatusAfter = (ms) => {
+    setTimeout(
+      () => {
+        setStatusMessage("");
+        setStatusClass("");
+      },
+      ms ? ms : 5000
+    );
+  };
 
-      fetch(`${groups_endpoint}/${groupId}/users`, options)
-        .then((res) => res.json())
-        .then((data) => {
-          let parent = document.getElementById(groupId);
-          let td = parent.querySelector(".group-members-td");
-          let members =
-            '<ol id="group-members-list">' +
-            data
-              .map((obj) => `<li>${obj["profile"]["login"]}</li>`)
-              .join("\n") +
-            "</ol>";
-          td.innerHTML = members;
-          // console.log(data);
-        })
-        .catch((err) => console.log(err));
+  const updateDeleteStatus = (success, groupName, err) => {
+    if (success) {
+      setStatusClass("success");
+      setStatusMessage(`Group: ${groupName} was successfully deleted.`);
+    } else {
+      setStatusClass("fail");
+      setStatusMessage(
+        `Group: ${groupName} could not be deleted. \n Reason: ${err}`
+      );
     }
+    clearStatusAfter();
+    setEditsMade(!editsMade);
   };
 
   const deleteGroup = (groupId, groupName) => {
@@ -183,18 +231,45 @@ export default (props) => {
         fetch(`${groups_endpoint}/${groupId}`, options)
           .then((res) => res.text())
           .then((data) => {
-            console.log(data);
-            window.location.reload();
+            updateDeleteStatus(true, groupName);
           })
-          .catch((err) => console.log(err));
+          .catch((err) => updateDeleteStatus(false, groupName, err));
       }
     }
   };
 
+  const clearCreateVals = () => {
+    const groupNameInput = document.getElementById("create-group-name-input");
+    const groupDescrInput = document.getElementById("create-group-descr-input");
+    groupNameInput.value = "";
+    groupDescrInput.value = "";
+    setGroupName("");
+    setGroupDescr("");
+  };
+
+  const updateCreatedStatus = (success) => {
+    if (success) {
+      setStatusMessage(`New group: ${groupName} successfully created.`);
+      setStatusClass("success");
+      clearCreateVals();
+    } else {
+      setStatusMessage(
+        `Could not create group: ${groupName}. Please make sure to provide a valid name.`
+      );
+      setStatusClass("fail");
+    }
+    clearStatusAfter();
+    setEditsMade(!editsMade);
+  };
+
+  const cancelCreateGroup = () => {
+    clearCreateVals();
+  };
+
   const createGroup = () => {
-    const okToCreate = window.confirm(`Create group ${groupName}?`);
-    if (okToCreate) {
-      if (groupName.length > 0) {
+    if (groupName.length > 0) {
+      const okToCreate = window.confirm(`Create group ${groupName}?`);
+      if (okToCreate) {
         if (authState.isAuthenticated) {
           const accessToken = authState.accessToken["value"];
           const method = "POST";
@@ -214,14 +289,16 @@ export default (props) => {
           fetch(`${groups_endpoint}`, options)
             .then((res) => res.json())
             .then((data) => {
-              console.log(data);
-              window.location.reload();
+              updateCreatedStatus(true);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+              console.log(err);
+              updateCreatedStatus(false);
+            });
         }
-      } else {
-        alert("Provide a valid group name");
       }
+    } else {
+      updateCreatedStatus(false);
     }
   };
 
@@ -246,6 +323,7 @@ export default (props) => {
     editButton.setAttribute("style", `background:${editBg}`);
     createButton.setAttribute("style", `background:${addBg}`);
   };
+
   const toggleView = (view, edit, add) => {
     const viewContainer = document.getElementById("group-table-container");
     const editContainer = document.getElementById("edit-group-users-container");
@@ -257,6 +335,11 @@ export default (props) => {
     viewContainer.setAttribute("style", `display:${viewDisplay}`);
     editContainer.setAttribute("style", `display:${editDisplay}`);
     addContainer.setAttribute("style", `display:${addDisplay}`);
+
+    setStatusMessage("");
+    setStatusClass("");
+    clearCreateVals();
+    clearEditVals();
   };
 
   const viewGroupsClicked = () => {
@@ -274,20 +357,14 @@ export default (props) => {
     toggleButton(false, false, true);
   };
 
-  const cancelCreateGroup = () => {
-    const groupNameInput = document.getElementById("create-group-name-input");
-    const groupDescrInput = document.getElementById("create-group-descr-input");
-    groupNameInput.value = "";
-    groupDescrInput.value = "";
-    setGroupName("");
-    setGroupDescr("");
-  };
-
   useEffect(() => {
     getUsersAndGroups();
+  }, [oktaAuth, authState, editsMade]);
+
+  useEffect(() => {
     getUserGroups();
     getUserMissingGroups();
-  }, [oktaAuth, userId, op, groupId]);
+  }, [groupId, userId, op]);
 
   return (
     <div id="group-form-container">
@@ -315,7 +392,9 @@ export default (props) => {
           Create New Group
         </button>
       </div>
-
+      <div id="status-message" className={statusClass}>
+        {statusMessage}
+      </div>
       <div id="group-table-container">
         <table id="groups-table">
           <thead>
@@ -329,7 +408,6 @@ export default (props) => {
           <tbody>
             {groups ? (
               groups.map((group) => {
-                getGroupMembers(group["id"]);
                 return (
                   <tr key={group["id"]} id={group["id"]}>
                     <td className="data-td">{group["id"]}</td>
@@ -403,8 +481,8 @@ export default (props) => {
           id="user-select"
           name="users"
           onChange={updateUserId}
-          value={userId}
           className="form-control"
+          defaultValue=""
         >
           <option value="">Select a User</option>
           {users
@@ -423,7 +501,7 @@ export default (props) => {
           id="group-select"
           name="groups"
           onChange={updateGroupId}
-          value={groupId}
+          defaultValue=""
           className="form-control"
         >
           <option value="">Select a Group</option>
