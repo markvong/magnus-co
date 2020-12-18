@@ -13,10 +13,22 @@ const Profile = () => {
   const [lName, setLName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
+  const [statusClass, setStatusClass] = useState("");
 
   const history = useHistory();
 
   const curr_user_endpoint = `https://dev-8181045.okta.com/api/v1/users/me`;
+
+  const clearStatusAfter = (ms) => {
+    setTimeout(
+      () => {
+        setStatusMessage("");
+        setStatusClass("");
+      },
+      ms ? ms : 5000
+    );
+  };
 
   const checkUser = async () => {
     if (!authState.isAuthenticated) {
@@ -68,6 +80,19 @@ const Profile = () => {
     }
   };
 
+  const updateStatus = (success, err) => {
+    if (success) {
+      setStatusClass("success");
+      setStatusMessage("Your profile was successfully updated.");
+    } else {
+      setStatusClass("fail");
+      setStatusMessage(
+        err ? `Error: ${err}.` : "Error: could not update your profile."
+      );
+    }
+    clearStatusAfter();
+  };
+
   const updateUser = () => {
     const okToUpdate = window.confirm("Save updates to your profile?");
     if (okToUpdate) {
@@ -95,8 +120,8 @@ const Profile = () => {
 
         fetch(curr_user_endpoint, options)
           .then((res) => res.json())
-          .then((data) => window.location.reload())
-          .catch((err) => console.log(err));
+          .then((data) => updateStatus(true))
+          .catch((err) => updateStatus(false, err));
       }
     }
   };
@@ -157,7 +182,7 @@ const Profile = () => {
     checkUser();
     getUserInfo();
     getUserGroups();
-  }, [oktaAuth, authState]);
+  }, [oktaAuth, authState, statusMessage]);
 
   const name = loginInfo
     ? `${loginInfo["profile"]["firstName"]} ${loginInfo["profile"]["lastName"]}`
@@ -206,6 +231,9 @@ const Profile = () => {
           <h3 id="overall-profile-title">
             Welcome back, <span id="profile-name">{name}</span>!
           </h3>
+          <div id="profile-status-message" className={statusClass}>
+            {statusMessage}
+          </div>
           <div id="profile-grid-container" className="grid-container">
             <h4 className="container-title" id="profile-title">
               Profile Information

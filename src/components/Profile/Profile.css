@@ -24,6 +24,7 @@
   grid-template-columns: 50% 50%;
   grid-template-areas:
     "overall-profile-title overall-profile-title"
+    "profile-status-message profile-status-message"
     "profile-grid-container groups-container"
     "buttons-container buttons-container";
 }
@@ -139,4 +140,10 @@
   margin: 0 1.3rem 0 1.3rem;
   font-size: 1.1rem;
   margin-bottom: 9rem;
+}
+
+#profile-status-message {
+  margin: 1.3rem 0 1.3rem 0;
+  font-size: 1.5rem;
+  grid-area: profile-status-message;
 }
