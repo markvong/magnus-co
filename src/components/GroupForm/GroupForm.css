@@ -34,7 +34,9 @@
 
 #group-table-container {
   height: 100%;
+  width: 100%;
   margin: 2.5rem;
+  overflow-x: auto;
 }
 
 #groups-table {
