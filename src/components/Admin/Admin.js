@@ -72,12 +72,12 @@ export default () => {
     userGroups.includes("Administrators");
 
   return (
-    <div id="admin-container">
+    <div id='admin-container'>
       {isAdmin ? (
-        <div id="inner-admin-container">
-          <h3 id="admin-welcome-title">
+        <div id='inner-admin-container'>
+          <h3 id='admin-welcome-title'>
             Welcome back,{" "}
-            <span className="admin-name">
+            <span className='admin-name'>
               Administrator {profileInfo["profile"]["firstName"]}{" "}
               {profileInfo["profile"]["lastName"]}
             </span>
@@ -86,7 +86,9 @@ export default () => {
           <UserForm setEditsMade={setEditsMade} editsMade={editsMade} />
         </div>
       ) : (
-        <h3>You need administrator privileges to view this page.</h3>
+        <div id='not-admin-message'>
+          You need administrator privileges to view this page.
+        </div>
       )}
     </div>
   );
