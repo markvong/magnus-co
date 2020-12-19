@@ -1,5 +1,6 @@
 #landing-container {
   color: white;
+  min-height: 100%;
 }
 
 .title {
