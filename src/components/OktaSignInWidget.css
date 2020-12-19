@@ -19,7 +19,15 @@
   color: white;
 }
 
-#okta-sign-in.auth-container .primary-auth {
+#okta-sign-in.auth-container .primary-auth,
+#okta-sign-in .o-form .infobox,
+#okta-sign-in .registration .subschema .subschema-satisfied,
+#okta-sign-in .registration .o-form-fieldset-container .required-fields-label {
   font-family: verdana;
   color: white;
+}
+
+#okta-sign-in .o-form .infobox {
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
 }

@@ -147,3 +147,10 @@
   font-size: 1.5rem;
   grid-area: profile-status-message;
 }
+
+@media (max-width: 600px) {
+  #inner-profile-container {
+    display: flex;
+    flex-direction: column;
+  }
+}

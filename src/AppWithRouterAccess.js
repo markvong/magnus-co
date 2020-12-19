@@ -7,6 +7,7 @@ import config from "./config";
 import Navbar from "./components/Navbar/Navbar";
 import Profile from "./components/Profile/Profile";
 import Login from "./components/Login";
+import SignIn from "./components/SignIn/SignIn";
 import Landing from "./components/Landing/Landing";
 import Admin from "./components/Admin/Admin";
 
@@ -23,17 +24,18 @@ export default withRouter(
 
     render() {
       const oktaAuth = new OktaAuth(config.oidc);
-
+      // console.log(config.oidc);
       return (
         <Security oktaAuth={oktaAuth} onAuthRequired={this.onAuthRequired}>
           <Navbar />
-          <div className="main-container">
+          <div className='main-container'>
             <Switch>
-              <SecureRoute path="/profile" exact={true} component={Profile} />
-              <SecureRoute path="/admin" component={Admin} />
-              <Route path="/login" render={() => <Login />} />
-              <Route path="/login/callback" component={LoginCallback} />
-              <Route path="/" component={Landing} />
+              <SecureRoute path='/profile' exact={true} component={Profile} />
+              <SecureRoute path='/admin' component={Admin} />
+              {/* <Route path="/login" render={() => <Login />} /> */}
+              <Route path='/login' render={() => <Login />} />
+              <Route path='/login/callback' component={LoginCallback} />
+              <Route path='/' exact component={Landing} />
             </Switch>
           </div>
         </Security>

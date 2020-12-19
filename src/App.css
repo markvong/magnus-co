@@ -17,3 +17,13 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+@media (max-width: 600px) {
+  html {
+    min-height: 100%;
+  }
+
+  body {
+    min-height: 100%;
+  }
+}
