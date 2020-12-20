@@ -6,9 +6,8 @@ import "./OktaSignInWidget.css";
 import config from "../config";
 
 const OktaSignInWidget = (props) => {
-  //   const el = "#root";
   const widgetRef = useRef();
-  const { oktaAuth, authState } = useOktaAuth();
+  const { oktaAuth } = useOktaAuth();
   const { clientId, issuer, redirectUri, baseUrl, scopes } = config.oidc;
   const {
     logo,
@@ -45,7 +44,6 @@ const OktaSignInWidget = (props) => {
   };
 
   useEffect(() => {
-    // console.log(authState.isAuthenticated, "is auth?");
     if (!widgetRef.current) {
       return false;
     }
@@ -56,7 +54,6 @@ const OktaSignInWidget = (props) => {
         scopes
       })
       .then((tokens) => {
-        // console.log(tokens);
         oktaAuth.handleLoginRedirect(tokens);
       });
 

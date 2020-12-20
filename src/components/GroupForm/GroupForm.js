@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useOktaAuth } from "@okta/okta-react";
 import "./GroupForm.css";
 
-export default (props) => {
+const GroupForm = (props) => {
   const { authState, oktaAuth } = useOktaAuth();
 
   const [users, setUsers] = useState(null);
@@ -367,40 +367,40 @@ export default (props) => {
   }, [groupId, userId, op]);
 
   return (
-    <div id="group-form-container">
-      <h2 id="group-form-title">Group Management</h2>
-      <div id="crud-button-group">
+    <div id='group-form-container'>
+      <h2 id='group-form-title'>Group Management</h2>
+      <div id='crud-button-group'>
         <button
-          id="view-groups-button"
-          className="btn btn-info"
+          id='view-groups-button'
+          className='btn btn-info'
           onClick={viewGroupsClicked}
         >
           View Groups
         </button>
         <button
-          id="edit-groups-button"
-          className="btn btn-primary"
+          id='edit-groups-button'
+          className='btn btn-primary'
           onClick={editGroupsClicked}
         >
           Edit Group
         </button>
         <button
-          id="create-groups-button"
-          className="btn btn-success"
+          id='create-groups-button'
+          className='btn btn-success'
           onClick={createGroupsClicked}
         >
           Create New Group
         </button>
       </div>
-      <div id="group-status-message" className={statusClass}>
+      <div id='group-status-message' className={statusClass}>
         {statusMessage}
       </div>
-      <div id="group-table-container">
-        <table id="groups-table">
+      <div id='group-table-container'>
+        <table id='groups-table'>
           <thead>
             <tr>
               <th>Group ID</th>
-              <th className="borders">Group Name</th>
+              <th className='borders'>Group Name</th>
               <th>Group Members</th>
               {/* <th></th> */}
             </tr>
@@ -410,17 +410,17 @@ export default (props) => {
               groups.map((group) => {
                 return (
                   <tr key={group["id"]} id={group["id"]}>
-                    <td className="data-td">{group["id"]}</td>
-                    <td className="data-td borders">
+                    <td className='data-td'>{group["id"]}</td>
+                    <td className='data-td borders'>
                       {group["profile"]["name"]}
                     </td>
-                    <td className="group-members-td data-td"></td>
-                    <td className="delete-group-btn-td">
+                    <td className='group-members-td data-td'></td>
+                    <td className='delete-group-btn-td'>
                       <button
                         onClick={() =>
                           deleteGroup(group["id"], group["profile"]["name"])
                         }
-                        className="btn btn-danger del-grp-btn"
+                        className='btn btn-danger del-grp-btn'
                       >
                         Delete Group
                       </button>
@@ -434,57 +434,57 @@ export default (props) => {
           </tbody>
         </table>
       </div>
-      <div id="create-form-container">
+      <div id='create-form-container'>
         <input
           onChange={handleGroupName}
-          placeholder="Enter a group name"
-          id="create-group-name-input"
-          className="form-control"
+          placeholder='Enter a group name'
+          id='create-group-name-input'
+          className='form-control'
         />
         <textarea
           onChange={handleGroupDescr}
-          placeholder="Enter a group description"
-          id="create-group-descr-input"
-          className="form-control"
+          placeholder='Enter a group description'
+          id='create-group-descr-input'
+          className='form-control'
         />
         <button
           onClick={createGroup}
-          id="create-group-button"
-          className="btn btn-primary"
+          id='create-group-button'
+          className='btn btn-primary'
         >
           Create Group
         </button>
         <button
-          id="cancel-create-group-button"
-          className="btn btn-danger"
+          id='cancel-create-group-button'
+          className='btn btn-danger'
           onClick={cancelCreateGroup}
         >
           Cancel
         </button>
       </div>
-      <div id="edit-group-users-container">
+      <div id='edit-group-users-container'>
         <select
-          id="group-op-select"
-          name="group-op-select"
-          defaultValue=""
+          id='group-op-select'
+          name='group-op-select'
+          defaultValue=''
           onChange={handleGroupOps}
-          className="form-control"
+          className='form-control'
         >
-          <option value="">Select Operation</option>
-          <option value="PUT">Add</option>
-          <option value="DELETE">Remove</option>
+          <option value=''>Select Operation</option>
+          <option value='PUT'>Add</option>
+          <option value='DELETE'>Remove</option>
         </select>
-        <label htmlFor="users">
-          <span className="edit-static-text">user</span>
+        <label htmlFor='users'>
+          <span className='edit-static-text'>user</span>
         </label>
         <select
-          id="user-select"
-          name="users"
+          id='user-select'
+          name='users'
           onChange={updateUserId}
-          className="form-control"
-          defaultValue=""
+          className='form-control'
+          defaultValue=''
         >
-          <option value="">Select a User</option>
+          <option value=''>Select a User</option>
           {users
             ? users.map((user) => (
                 <option
@@ -494,17 +494,17 @@ export default (props) => {
               ))
             : "Loading users..."}
         </select>
-        <label htmlFor="groups">
-          <span className="edit-static-text">{`${prep} group`}</span>
+        <label htmlFor='groups'>
+          <span className='edit-static-text'>{`${prep} group`}</span>
         </label>
         <select
-          id="group-select"
-          name="groups"
+          id='group-select'
+          name='groups'
           onChange={updateGroupId}
-          defaultValue=""
-          className="form-control"
+          defaultValue=''
+          className='form-control'
         >
-          <option value="">Select a Group</option>
+          <option value=''>Select a Group</option>
           {localGroups && op === "DELETE"
             ? localGroups.map((group) => (
                 <option value={group["id"]} key={group["id"]}>
@@ -530,8 +530,8 @@ export default (props) => {
           onClick={() =>
             updateUserGroupMembership(op, groupId, userId, name, group)
           }
-          id="edit-group-submit-btn"
-          className="btn btn-primary"
+          id='edit-group-submit-btn'
+          className='btn btn-primary'
         >
           Submit
         </button>
@@ -539,3 +539,5 @@ export default (props) => {
     </div>
   );
 };
+
+export default GroupForm;

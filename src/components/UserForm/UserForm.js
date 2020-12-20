@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useOktaAuth } from "@okta/okta-react";
 import "./UserForm.css";
 
-export default (props) => {
+const UserForm = (props) => {
   const users_endpoint = "https://dev-8181045.okta.com/api/v1/users";
   const { authState, oktaAuth } = useOktaAuth();
 
@@ -124,22 +124,20 @@ export default (props) => {
             }
           })
           .then((data) => {
-            {
-              if (data === "OK") {
-                updateCreateStatus(true, login);
-              } else if (data.errorCode === "E0000001") {
-                updateCreateStatus(
-                  false,
-                  login,
-                  `${data.errorCode}: This username already exists`
-                );
-              } else {
-                updateCreateStatus(
-                  false,
-                  login,
-                  `${data.erroCode}: ${data.errorSummary}`
-                );
-              }
+            if (data === "OK") {
+              updateCreateStatus(true, login);
+            } else if (data.errorCode === "E0000001") {
+              updateCreateStatus(
+                false,
+                login,
+                `${data.errorCode}: This username already exists`
+              );
+            } else {
+              updateCreateStatus(
+                false,
+                login,
+                `${data.erroCode}: ${data.errorSummary}`
+              );
             }
           })
           .catch((err) => updateCreateStatus(false, login, err));
@@ -314,9 +312,7 @@ export default (props) => {
           fetch(`${users_endpoint}/${userId}`, options)
             .then((res) => res.json())
             .then((data) => {
-              // console.log(data);
               updateSaveStatus(true, login);
-              // window.location.reload();
             })
             .catch((err) => updateSaveStatus(false, login, err));
         }
@@ -389,40 +385,39 @@ export default (props) => {
   };
 
   return (
-    <div id="user-form-container">
-      <h2 id="user-form-title">User Management</h2>
-      <div id="crud-button-users">
+    <div id='user-form-container'>
+      <h2 id='user-form-title'>User Management</h2>
+      <div id='crud-button-users'>
         <button
-          id="view-users-button"
-          className="btn btn-info"
+          id='view-users-button'
+          className='btn btn-info'
           onClick={viewUsersClicked}
         >
           View Users
         </button>
 
         <button
-          id="create-user-button"
-          className="btn btn-success"
+          id='create-user-button'
+          className='btn btn-success'
           onClick={createUsersClicked}
         >
           Create New User
         </button>
       </div>
-      <div id="user-status-message" className={statusClass}>
+      <div id='user-status-message' className={statusClass}>
         {statusMessage}
       </div>
-      <div id="users-table-container">
+      <div id='users-table-container'>
         <table>
-          {/* <caption>All Users</caption> */}
           <thead>
             <tr>
               <th></th>
               <th>User ID</th>
-              <th className="borders">Member ID</th>
-              <th className="borders">First Name</th>
-              <th className="borders">Last Name </th>
-              <th className="borders">Email</th>
-              <th className="borders">Login Username</th>
+              <th className='borders'>Member ID</th>
+              <th className='borders'>First Name</th>
+              <th className='borders'>Last Name </th>
+              <th className='borders'>Email</th>
+              <th className='borders'>Login Username</th>
               <th>Groups</th>
               <th></th>
             </tr>
@@ -430,62 +425,61 @@ export default (props) => {
           <tbody>
             {users ? (
               users.map((user) => {
-                // getUserGroups(user["id"]);
                 return (
                   <tr key={user["id"]} id={user["id"]}>
                     <td>
                       <button
-                        className="user-update-btn user-btn btn btn-primary"
+                        className='user-update-btn user-btn btn btn-primary'
                         onClick={(event) => updateUser(event, user["id"])}
                       >
                         Update User
                       </button>
                     </td>
-                    <td className="user-data-td">{user["id"]}</td>
-                    <td className="user-data-td borders">
+                    <td className='user-data-td'>{user["id"]}</td>
+                    <td className='user-data-td borders'>
                       {user["profile"]["memberId"]}
                     </td>
-                    <td className="borders user-data-td">
+                    <td className='borders user-data-td'>
                       <input
-                        className="user-input firstName form-control"
-                        type="text"
+                        className='user-input firstName form-control'
+                        type='text'
                         defaultValue={user["profile"]["firstName"]}
                         readOnly
                       />
                     </td>
-                    <td className="borders user-data-td">
+                    <td className='borders user-data-td'>
                       <input
-                        className="user-input lastName form-control"
-                        type="text"
+                        className='user-input lastName form-control'
+                        type='text'
                         defaultValue={user["profile"]["lastName"]}
                         readOnly
                       />
                     </td>
-                    <td className="borders user-data-td">
+                    <td className='borders user-data-td'>
                       <input
-                        className="user-input email form-control"
-                        type="text"
+                        className='user-input email form-control'
+                        type='text'
                         defaultValue={user["profile"]["email"]}
                         readOnly
                       />
                     </td>
-                    <td className="borders user-data-td">
+                    <td className='borders user-data-td'>
                       <input
-                        className="user-input login form-control"
-                        type="text"
+                        className='user-input login form-control'
+                        type='text'
                         defaultValue={user["profile"]["login"]}
                         readOnly
                       />
                     </td>
 
-                    <td className="user-groups user-data-td">
+                    <td className='user-groups user-data-td'>
                       {"Loading groups..."}
                     </td>
 
                     <td>
                       {
                         <button
-                          className="user-delete-btn user-btn btn btn-danger"
+                          className='user-delete-btn user-btn btn btn-danger'
                           onClick={() =>
                             deleteUser(user["id"], user["profile"]["login"])
                           }
@@ -495,7 +489,7 @@ export default (props) => {
                       }
                       {
                         <button
-                          className="user-save-btn user-btn btn btn-success"
+                          className='user-save-btn user-btn btn btn-success'
                           hidden
                           onClick={() => saveUpdate(user["id"])}
                         >
@@ -504,7 +498,7 @@ export default (props) => {
                       }
                       {
                         <button
-                          className="user-cancel-save-btn user-btn btn btn-danger"
+                          className='user-cancel-save-btn user-btn btn btn-danger'
                           hidden
                           onClick={() => cancelSave(user["id"])}
                         >
@@ -523,42 +517,42 @@ export default (props) => {
           </tbody>
         </table>
       </div>
-      <div id="create-form">
+      <div id='create-form'>
         <input
           onChange={handleFN}
-          placeholder="Enter a first name"
-          id="first-name-input"
+          placeholder='Enter a first name'
+          id='first-name-input'
         />
         <input
           onChange={handleLN}
-          placeholder="Enter a last name"
-          id="last-name-input"
+          placeholder='Enter a last name'
+          id='last-name-input'
         />
         <input
           onChange={handleEmail}
-          placeholder="Enter a valid email address"
-          id="email-input"
+          placeholder='Enter a valid email address'
+          id='email-input'
         />
         <input
           onChange={handleLogin}
-          placeholder="Enter a login username"
-          id="login-input"
+          placeholder='Enter a login username'
+          id='login-input'
         />
         <input
           onChange={handleMemberId}
-          placeholder="Enter a valid member ID"
-          id="member-id-input"
+          placeholder='Enter a valid member ID'
+          id='member-id-input'
         />
         <button
           onClick={createUser}
-          id="create-user-btn"
-          className="btn btn-primary user-btn"
+          id='create-user-btn'
+          className='btn btn-primary user-btn'
         >
           Create User
         </button>
         <button
-          id="cancel-user-create-btn"
-          className="btn btn-danger user-btn"
+          id='cancel-user-create-btn'
+          className='btn btn-danger user-btn'
           onClick={cancelCreateUser}
         >
           Cancel
@@ -567,3 +561,5 @@ export default (props) => {
     </div>
   );
 };
+
+export default UserForm;

@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useOktaAuth } from "@okta/okta-react";
 import "./Navbar.css";
 
-const Navbar = () => {
+const Navbar = (props) => {
   const curr_user_endpoint = `https://dev-8181045.okta.com/api/v1/users/me`;
 
   const { oktaAuth, authState } = useOktaAuth();
@@ -12,7 +12,6 @@ const Navbar = () => {
 
   const login = async () => history.push("/login");
   const logout = async () => {
-    // oktaAuth.signOut();
     setLastLoginAndSignOut();
   };
 
@@ -69,12 +68,12 @@ const Navbar = () => {
   };
 
   const loginBtn = (
-    <button onClick={login} className="nav-log-btn btn btn-primary">
+    <button onClick={login} className='nav-log-btn btn btn-primary'>
       Login
     </button>
   );
   const logoutBtn = (
-    <button onClick={logout} className="nav-log-btn btn btn-primary">
+    <button onClick={logout} className='nav-log-btn btn btn-primary'>
       Logout
     </button>
   );
@@ -89,46 +88,42 @@ const Navbar = () => {
 
   useEffect(() => {
     getLastLogin();
-  }, [authState]);
+  }, [oktaAuth, authState]);
 
   return (
-    <div id="nav-bar">
-      <div id="logo-div">
-        <Link to="/" className="logo-link">
-          <img src="/images/mountain-solid.png" id="logo" />
-          <span className="logo-text">Magnus</span>
+    <div id='nav-bar'>
+      <div id='logo-div'>
+        <Link to='/' className='logo-link'>
+          <img src='/images/mountain-solid.png' id='logo' alt='logo' />
+          <span className='logo-text'>Magnus</span>
         </Link>
       </div>
-      <div id="links-div">
-        <Link
-          to="/"
-          className="nav-link current"
-          id="home"
-          onClick={handleLinkClicked}
-        >
+      <div id='links-div'>
+        <Link to='/' className='nav-link' id='home' onClick={handleLinkClicked}>
           Home
         </Link>
         <Link
-          to="/profile"
-          className="nav-link"
-          id="profile"
+          to='/profile'
+          className='nav-link'
+          id='profile'
           onClick={handleLinkClicked}
         >
           Profile
         </Link>
         <Link
-          to="/admin"
-          className="nav-link"
-          id="admin"
+          to='/admin'
+          className='nav-link'
+          id='admin'
           onClick={handleLinkClicked}
         >
           Administration
         </Link>
         <a
-          href="https://dev-8181045.okta.com/app/UserHome?fromAdmin=true"
-          target="_blank"
-          className="nav-link"
-          id="okta"
+          href='https://dev-8181045.okta.com/app/UserHome?fromAdmin=true'
+          target='_blank'
+          rel='noreferrer'
+          className='nav-link'
+          id='okta'
           onClick={handleLinkClicked}
         >
           Okta Apps

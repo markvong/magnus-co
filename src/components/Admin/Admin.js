@@ -4,7 +4,7 @@ import GroupForm from "../GroupForm/GroupForm";
 import UserForm from "../UserForm/UserForm";
 import "./Admin.css";
 
-export default () => {
+const Admin = () => {
   const { authState, oktaAuth } = useOktaAuth();
   const [userInfo, setUserInfo] = useState(null);
   const [profileInfo, setProfileInfo] = useState(null);
@@ -93,3 +93,5 @@ export default () => {
     </div>
   );
 };
+
+export default Admin;

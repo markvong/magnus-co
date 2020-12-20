@@ -8,7 +8,7 @@ const USERNAME_ERR_MESSAGE = "Please provide a valid username.";
 const PASSWORD_ERR_MESSAGE = "Please enter a valid password.";
 const SIGN_IN_ERR = "Sign in failed! Try again.";
 
-export default {
+const config = {
   oidc: {
     clientId: CLIENT_ID,
     issuer: ISSUER,
@@ -33,3 +33,5 @@ export default {
     sign_in_err: SIGN_IN_ERR
   }
 };
+
+export default config;

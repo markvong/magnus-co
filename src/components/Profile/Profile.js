@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
 import { useOktaAuth } from "@okta/okta-react";
 import "./Profile.css";
 
-const Profile = () => {
+const Profile = (props) => {
   const { oktaAuth, authState } = useOktaAuth();
   const [userInfo, setUserInfo] = useState(null);
   const [loginInfo, setLoginInfo] = useState(null);
@@ -15,8 +14,6 @@ const Profile = () => {
   const [username, setUsername] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [statusClass, setStatusClass] = useState("");
-
-  const history = useHistory();
 
   const curr_user_endpoint = `https://dev-8181045.okta.com/api/v1/users/me`;
 
@@ -198,8 +195,8 @@ const Profile = () => {
       : "You have not previously logged in.";
   const editBtn = (
     <button
-      id="edit-button"
-      className="btn btn-info prof-btn"
+      id='edit-button'
+      className='btn btn-info prof-btn'
       onClick={editBtnClicked}
     >
       Edit Profile
@@ -207,8 +204,8 @@ const Profile = () => {
   );
   const saveBtn = (
     <button
-      id="save-button"
-      className="btn btn-success prof-btn"
+      id='save-button'
+      className='btn btn-success prof-btn'
       onClick={saveBtnClicked}
     >
       Save Changes
@@ -216,8 +213,8 @@ const Profile = () => {
   );
   const cancelBtn = (
     <button
-      id="cancel-button"
-      className="btn btn-danger prof-btn"
+      id='cancel-button'
+      className='btn btn-danger prof-btn'
       onClick={cancelBtnClicked}
     >
       Cancel
@@ -225,100 +222,100 @@ const Profile = () => {
   );
 
   return (
-    <div id="profile-container">
+    <div id='profile-container'>
       {userInfo && loginInfo ? (
-        <div id="inner-profile-container">
-          <h3 id="overall-profile-title">
-            Welcome back, <span id="profile-name">{name}</span>!
+        <div id='inner-profile-container'>
+          <h3 id='overall-profile-title'>
+            Welcome back, <span id='profile-name'>{name}</span>!
           </h3>
-          <div id="profile-status-message" className={statusClass}>
+          <div id='profile-status-message' className={statusClass}>
             {statusMessage}
           </div>
-          <div id="profile-grid-container" className="grid-container">
-            <h4 className="container-title" id="profile-title">
+          <div id='profile-grid-container' className='grid-container'>
+            <h4 className='container-title' id='profile-title'>
               Profile Information
             </h4>
-            <span id="id-label" className="label-cell cell">
+            <span id='id-label' className='label-cell cell'>
               User ID:
             </span>
-            <span id="id-val" className="value-cell cell">
+            <span id='id-val' className='value-cell cell'>
               {userID}
             </span>
 
-            <span id="member-id-label" className="label-cell cell">
+            <span id='member-id-label' className='label-cell cell'>
               Member ID:
             </span>
-            <span id="member-id-val" className="value-cell cell">
+            <span id='member-id-val' className='value-cell cell'>
               {loginInfo["profile"]["memberId"]}
             </span>
 
-            <span id="manager-id-label" className="label-cell cell">
+            <span id='manager-id-label' className='label-cell cell'>
               Manager ID:
             </span>
-            <span id="manager-id-val" className="value-cell cell">
+            <span id='manager-id-val' className='value-cell cell'>
               {loginInfo["profile"]["managerId"]}
             </span>
 
-            <span id="login-label" className="label-cell cell">
+            <span id='login-label' className='label-cell cell'>
               Last login:
             </span>
-            <span id="login-val" className="value-cell cell">
+            <span id='login-val' className='value-cell cell'>
               {lastLogged}
             </span>
 
-            <span id="username-label" className="label-cell cell">
+            <span id='username-label' className='label-cell cell'>
               Username:
             </span>
             <input
-              id="username-val"
-              className="value-cell cell"
+              id='username-val'
+              className='value-cell cell'
               defaultValue={username}
               onChange={handleUsername}
               readOnly
             />
 
-            <span id="email-label" className="label-cell cell">
+            <span id='email-label' className='label-cell cell'>
               Email:
             </span>
             <input
-              id="email-val"
-              className="value-cell cell"
+              id='email-val'
+              className='value-cell cell'
               defaultValue={email}
               onChange={handleEmail}
               readOnly
             />
 
-            <span id="fname-label" className="label-cell cell">
+            <span id='fname-label' className='label-cell cell'>
               First Name:
             </span>
             <input
-              id="fname-val"
-              className="value-cell cell"
+              id='fname-val'
+              className='value-cell cell'
               defaultValue={fName}
               readOnly
               onChange={handleFName}
             />
 
-            <span id="lname-label" className="label-cell cell">
+            <span id='lname-label' className='label-cell cell'>
               Last Name:
             </span>
             <input
-              id="lname-val"
-              className="value-cell cell"
+              id='lname-val'
+              className='value-cell cell'
               defaultValue={lName}
               onChange={handleLName}
               readOnly
             />
           </div>
 
-          <div id="groups-container" className="grid-container">
-            <h4 className="container-title" id="groups-title">
+          <div id='groups-container' className='grid-container'>
+            <h4 className='container-title' id='groups-title'>
               Your Groups
             </h4>
-            <ol id="profile-groups-list">
+            <ol id='profile-groups-list'>
               {userGroups
                 ? userGroups.map((group, idx) => (
-                    <li key={idx} className="profile-groups">
+                    <li key={idx} className='profile-groups'>
                       {group}
                     </li>
                   ))
@@ -326,7 +323,7 @@ const Profile = () => {
             </ol>
           </div>
 
-          <div id="buttons-container">
+          <div id='buttons-container'>
             {editMode ? (
               <div>
                 {saveBtn}
