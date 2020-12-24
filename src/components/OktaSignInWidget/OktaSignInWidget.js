@@ -3,7 +3,7 @@ import OktaSignIn from "@okta/okta-signin-widget";
 import { useOktaAuth } from "@okta/okta-react";
 import "@okta/okta-signin-widget/dist/css/okta-sign-in.min.css";
 import "./OktaSignInWidget.css";
-import config from "../config";
+import config from "../../config";
 
 const OktaSignInWidget = (props) => {
   const widgetRef = useRef();

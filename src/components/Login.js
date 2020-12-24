@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import OktaSignInWidget from "./OktaSignInWidget";
+import OktaSignInWidget from "../components/OktaSignInWidget/OktaSignInWidget";
 import { useOktaAuth } from "@okta/okta-react";
 
 const Login = (props) => {
