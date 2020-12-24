@@ -8,6 +8,7 @@ const Navbar = (props) => {
 
   const { oktaAuth, authState } = useOktaAuth();
   const history = useHistory();
+  const [userInfo, setUserInfo] = useState(null);
   const [currLogin, setCurrLogin] = useState(null);
 
   const login = async () => history.push("/login");
@@ -27,6 +28,7 @@ const Navbar = (props) => {
       fetch(curr_user_endpoint, options)
         .then((res) => res.json())
         .then((data) => {
+          setUserInfo(data);
           setCurrLogin(data["lastLogin"]);
         })
         .catch((err) => console.log(err));
@@ -128,6 +130,13 @@ const Navbar = (props) => {
         >
           Okta Apps
         </a>
+      </div>
+      <div id='nav-login-container'>
+        <span id='navbar-login'>
+          {authState.isAuthenticated && userInfo
+            ? userInfo["profile"]["login"]
+            : ""}
+        </span>
         {button}
       </div>
     </div>
