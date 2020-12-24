@@ -518,31 +518,46 @@ const UserForm = (props) => {
         </table>
       </div>
       <div id='create-form'>
-        <input
-          onChange={handleFN}
-          placeholder='Enter a first name'
-          id='first-name-input'
-        />
-        <input
-          onChange={handleLN}
-          placeholder='Enter a last name'
-          id='last-name-input'
-        />
-        <input
-          onChange={handleEmail}
-          placeholder='Enter a valid email address'
-          id='email-input'
-        />
-        <input
-          onChange={handleLogin}
-          placeholder='Enter a login username'
-          id='login-input'
-        />
-        <input
-          onChange={handleMemberId}
-          placeholder='Enter a valid member ID'
-          id='member-id-input'
-        />
+        <label className='create-user-label'>
+          First Name:
+          <input
+            onChange={handleFN}
+            placeholder='Enter a first name'
+            id='first-name-input'
+          />
+        </label>
+        <label className='create-user-label'>
+          Last Name:
+          <input
+            onChange={handleLN}
+            placeholder='Enter a last name'
+            id='last-name-input'
+          />
+        </label>
+        <label className='create-user-label'>
+          Email:
+          <input
+            onChange={handleEmail}
+            placeholder='Enter a valid email address'
+            id='email-input'
+          />
+        </label>
+        <label className='create-user-label'>
+          Username:
+          <input
+            onChange={handleLogin}
+            placeholder='Enter a login username'
+            id='login-input'
+          />
+        </label>
+        <label className='create-user-label'>
+          Member ID:
+          <input
+            onChange={handleMemberId}
+            placeholder='Enter a valid member ID'
+            id='member-id-input'
+          />
+        </label>
         <button
           onClick={createUser}
           id='create-user-btn'
