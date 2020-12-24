@@ -80,13 +80,13 @@ const Navbar = (props) => {
     </button>
   );
 
-  let button = authState.isPending ? (
-    <button></button>
-  ) : !authState.isAuthenticated ? (
-    loginBtn
-  ) : (
-    logoutBtn
-  );
+  // let button = authState.isPending ? (
+  //   <button></button>
+  // ) : !authState.isAuthenticated ? (
+  //   loginBtn
+  // ) : (
+  //   logoutBtn
+  // );
 
   useEffect(() => {
     getLastLogin();
@@ -105,21 +105,14 @@ const Navbar = (props) => {
           Home
         </Link>
         <Link
-          to='/profile'
+          to='/about'
           className='nav-link'
-          id='profile'
+          id='about'
           onClick={handleLinkClicked}
         >
-          Profile
+          About
         </Link>
-        <Link
-          to='/admin'
-          className='nav-link'
-          id='admin'
-          onClick={handleLinkClicked}
-        >
-          Administration
-        </Link>
+
         <a
           href='https://dev-8181045.okta.com/app/UserHome?fromAdmin=true'
           target='_blank'
@@ -132,12 +125,32 @@ const Navbar = (props) => {
         </a>
       </div>
       <div id='nav-login-container'>
-        <span id='navbar-login'>
-          {authState.isAuthenticated && userInfo
-            ? userInfo["profile"]["login"]
-            : ""}
-        </span>
-        {button}
+        {authState.isAuthenticated && userInfo ? (
+          <div id='navbar-login'>
+            {userInfo["profile"]["login"]}
+            <div id='dropdown-content'>
+              <Link
+                to='/profile'
+                className='nav-link'
+                id='profile'
+                onClick={handleLinkClicked}
+              >
+                Profile
+              </Link>
+              <Link
+                to='/admin'
+                className='nav-link'
+                id='admin'
+                onClick={handleLinkClicked}
+              >
+                Administration
+              </Link>
+              {logoutBtn}
+            </div>
+          </div>
+        ) : (
+          loginBtn
+        )}
       </div>
     </div>
   );

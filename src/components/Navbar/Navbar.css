@@ -87,7 +87,25 @@
 
 #nav-login-container {
   /* border: 1px red solid; */
-  display: flex;
+  display: inline-block;
+  position: relative;
   /* flex-direction: column; */
   /* align-items: center; */
+}
+#navbar-login {
+  width: 100%;
+  /* border: 1px green solid; */
+}
+#dropdown-content {
+  width: 100%;
+  display: none;
+  position: absolute;
+  /* top: 0;
+  right: 0; */
+  background: rgba(0, 0, 0, 0.8);
+  /* border: 1px red solid; */
+}
+
+#nav-login-container:hover #dropdown-content {
+  display: block;
 }
