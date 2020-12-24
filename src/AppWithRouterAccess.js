@@ -9,6 +9,7 @@ import Profile from "./components/Profile/Profile";
 import Login from "./components/Login";
 import Landing from "./components/Landing/Landing";
 import Admin from "./components/Admin/Admin";
+import About from "./components/About/About";
 
 const AppWithRouterAccess = () => {
   const history = useHistory();
@@ -26,6 +27,7 @@ const AppWithRouterAccess = () => {
         <Switch>
           <SecureRoute path='/profile' render={() => <Profile />} />
           <SecureRoute path='/admin' render={() => <Admin />} />
+          <Route path='/about' render={() => <About />} />
           <Route path='/login/callback' component={LoginCallback} />
           <Route path='/login' render={() => <Login />} />
           <Route path='/' exact={true} render={() => <Landing />} />
