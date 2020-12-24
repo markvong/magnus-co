@@ -34,6 +34,7 @@
 
 .user-btn {
   font-weight: bold;
+  font-size: 0.9rem;
   margin: 1rem;
 }
 
@@ -63,6 +64,10 @@
   padding: 1.3rem;
   border-top: 1px rgb(69, 126, 172) solid;
   border-bottom: 1px rgb(69, 126, 172) solid;
+  font-size: 0.9rem;
+}
+.user-data-td > * {
+  font-size: 0.9rem;
 }
 
 #user-status-message {

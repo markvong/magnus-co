@@ -4,6 +4,7 @@
   align-items: center;
   min-height: 100%;
   padding: 1rem;
+  font-size: 0.9rem;
 }
 
 #group-form-title {
@@ -30,6 +31,7 @@
 
 .btn {
   background: none;
+  /* font-size: 0.9rem; */
 }
 
 #group-table-container {
@@ -63,6 +65,7 @@
   font-weight: bold;
   margin: 0 0 0 1.3rem;
   background: none;
+  font-size: 0.9rem;
 }
 
 #edit-group-users-container {
