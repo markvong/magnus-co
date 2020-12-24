@@ -135,6 +135,12 @@ th {
   color: red;
 }
 
+#group-name-label,
+#group-descr-label {
+  width: 100%;
+  text-align: left;
+}
+
 @media (max-width: 600px) {
   #group-table-container {
     /* align-items: flex-start; */

@@ -435,18 +435,25 @@ const GroupForm = (props) => {
         </table>
       </div>
       <div id='create-form-container'>
-        <input
-          onChange={handleGroupName}
-          placeholder='Enter a group name'
-          id='create-group-name-input'
-          className='form-control'
-        />
-        <textarea
-          onChange={handleGroupDescr}
-          placeholder='Enter a group description'
-          id='create-group-descr-input'
-          className='form-control'
-        />
+        <label id='group-name-label'>
+          Name:
+          <input
+            onChange={handleGroupName}
+            placeholder='Enter a group name'
+            id='create-group-name-input'
+            className='form-control'
+          />
+        </label>
+        <label id='group-descr-label'>
+          Description:
+          <textarea
+            onChange={handleGroupDescr}
+            placeholder='Enter a group description'
+            id='create-group-descr-input'
+            className='form-control'
+          />
+        </label>
+
         <button
           onClick={createGroup}
           id='create-group-button'
