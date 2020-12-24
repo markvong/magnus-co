@@ -70,12 +70,20 @@ const Navbar = (props) => {
   };
 
   const loginBtn = (
-    <button onClick={login} className='nav-log-btn btn btn-primary'>
+    <button
+      onClick={login}
+      className='nav-log-btn btn btn-primary'
+      id='login-btn'
+    >
       Login
     </button>
   );
   const logoutBtn = (
-    <button onClick={logout} className='nav-log-btn btn btn-primary'>
+    <button
+      onClick={logout}
+      className='nav-log-btn btn btn-primary'
+      id='logout-btn'
+    >
       Logout
     </button>
   );
@@ -110,24 +118,13 @@ const Navbar = (props) => {
           id='about'
           onClick={handleLinkClicked}
         >
-          About
+          About Us
         </Link>
-
-        <a
-          href='https://dev-8181045.okta.com/app/UserHome?fromAdmin=true'
-          target='_blank'
-          rel='noreferrer'
-          className='nav-link'
-          id='okta'
-          onClick={handleLinkClicked}
-        >
-          Okta Apps
-        </a>
       </div>
       <div id='nav-login-container'>
         {authState.isAuthenticated && userInfo ? (
           <div id='navbar-login'>
-            {userInfo["profile"]["login"]}
+            <span className='user-login'>{userInfo["profile"]["login"]}</span>
             <div id='dropdown-content'>
               <Link
                 to='/profile'
@@ -145,6 +142,16 @@ const Navbar = (props) => {
               >
                 Administration
               </Link>
+              <a
+                href='https://dev-8181045.okta.com/app/UserHome?fromAdmin=true'
+                target='_blank'
+                rel='noreferrer'
+                className='nav-link'
+                id='okta'
+                onClick={handleLinkClicked}
+              >
+                Okta Apps
+              </a>
               {logoutBtn}
             </div>
           </div>
