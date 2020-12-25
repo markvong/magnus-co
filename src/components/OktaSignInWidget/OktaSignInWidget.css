@@ -31,3 +31,13 @@
   background: rgba(0, 0, 0, 0.6);
   border: none;
 }
+
+#okta-sign-in .registration-complete .back-btn,
+#okta-sign-in .registration-complete .desc,
+#okta-sign-in.auth-container .okta-form-input-field input {
+  color: white;
+}
+
+#okta-sign-in .o-form .o-form-input .o-form-control {
+  background: black;
+}
