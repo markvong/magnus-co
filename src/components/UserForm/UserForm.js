@@ -11,6 +11,7 @@ const UserForm = (props) => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [memberId, setMemberId] = useState("");
+  const [managerId, setManagerId] = useState("");
 
   const [users, setUsers] = useState("");
 
@@ -25,16 +26,19 @@ const UserForm = (props) => {
     const emailInput = document.getElementById("email-input");
     const loginInput = document.getElementById("login-input");
     const memberIdInput = document.getElementById("member-id-input");
+    const managerIdInput = document.getElementById("manager-id-input");
     fNameInput.value = "";
     lNameInput.value = "";
     emailInput.value = "";
     loginInput.value = "";
     memberIdInput.value = "";
+    managerIdInput.value = "";
     setFirstName("");
     setLastName("");
     setEmail("");
     setLogin("");
     setMemberId("");
+    setManagerId("");
   };
 
   const clearStatusAfter = (ms) => {
@@ -67,6 +71,10 @@ const UserForm = (props) => {
     setMemberId(e.target.value);
   };
 
+  const handleManagerId = (e) => {
+    setManagerId(e.target.value);
+  };
+
   const updateCreateStatus = (success, login, err) => {
     if (success) {
       setStatusClass("success");
@@ -89,6 +97,7 @@ const UserForm = (props) => {
       login &&
       email &&
       memberId &&
+      managerId &&
       authState.isAuthenticated
     ) {
       let okToAdd = window.confirm(`Create user ${login}?`);
@@ -105,7 +114,8 @@ const UserForm = (props) => {
             lastName: lastName,
             email: email,
             login: login,
-            memberId: memberId
+            memberId: memberId,
+            managerId: managerId
           }
         });
 
@@ -265,10 +275,13 @@ const UserForm = (props) => {
     if (!userInputs.every((input) => input.value.length > 0)) {
       alert("Fill in all fields please.");
     } else {
-      const firstName = userInputs[0].value;
-      const lastName = userInputs[1].value;
-      const email = userInputs[2].value;
-      const login = userInputs[3].value;
+      const memberId = userInputs[0].value;
+      const managerId = userInputs[1].value;
+      const firstName = userInputs[2].value;
+      const lastName = userInputs[3].value;
+      const email = userInputs[4].value;
+      const login = userInputs[5].value;
+      // console.log(userInputs);
       const okToSave = window.confirm(
         `Are you sure you want to save changes for user ${login}?`
       );
@@ -296,6 +309,8 @@ const UserForm = (props) => {
 
           const body = JSON.stringify({
             profile: {
+              memberId: memberId,
+              managerId: managerId,
               firstName: firstName,
               lastName: lastName,
               email: email,
@@ -412,8 +427,9 @@ const UserForm = (props) => {
           <thead>
             <tr>
               <th></th>
-              <th>User ID</th>
-              <th className='borders'>Member ID</th>
+              {/* <th>User ID</th> */}
+              <th>Member ID</th>
+              <th className='borders'>Manager ID</th>
               <th className='borders'>First Name</th>
               <th className='borders'>Last Name </th>
               <th className='borders'>Email</th>
@@ -435,9 +451,22 @@ const UserForm = (props) => {
                         Update User
                       </button>
                     </td>
-                    <td className='user-data-td'>{user["id"]}</td>
+                    {/* <td className='user-data-td'>{user["id"]}</td> */}
+                    <td className='user-data-td'>
+                      <input
+                        className='user-input memberId form-control'
+                        type='text'
+                        defaultValue={user["profile"]["memberId"]}
+                        readOnly
+                      />
+                    </td>
                     <td className='user-data-td borders'>
-                      {user["profile"]["memberId"]}
+                      <input
+                        className='user-input managerId form-control'
+                        type='text'
+                        defaultValue={user["profile"]["managerId"]}
+                        readOnly
+                      />
                     </td>
                     <td className='borders user-data-td'>
                       <input
@@ -556,6 +585,14 @@ const UserForm = (props) => {
             onChange={handleMemberId}
             placeholder='Enter a valid member ID'
             id='member-id-input'
+          />
+        </label>
+        <label className='create-user-label'>
+          Manager ID:
+          <input
+            onChange={handleManagerId}
+            placeholder='Enter a valid manager ID'
+            id='manager-id-input'
           />
         </label>
         <button
