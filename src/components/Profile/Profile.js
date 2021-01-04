@@ -59,21 +59,9 @@ const Profile = (props) => {
     }
   };
 
-  const getUserGroups = async () => {
-    if (authState.isAuthenticated) {
-      const accessToken = authState.accessToken["value"];
-      const options = {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      };
-      fetch(`${curr_user_endpoint}/groups`, options)
-        .then((res) => res.json())
-        .then((data) => {
-          if (!userGroups)
-            setUserGroups(data.map((obj) => obj["profile"]["name"]));
-        })
-        .catch((err) => console.log(err));
+  const getUserGroups = () => {
+    if (authState.isAuthenticated && !userGroups && userInfo) {
+      setUserGroups(userInfo.groups);
     }
   };
 
@@ -179,7 +167,7 @@ const Profile = (props) => {
     checkUser();
     getUserInfo();
     getUserGroups();
-  }, [oktaAuth, authState, statusMessage]);
+  }, [oktaAuth, authState, statusMessage, userInfo]);
 
   const name = loginInfo
     ? `${loginInfo["profile"]["firstName"]} ${loginInfo["profile"]["lastName"]}`
